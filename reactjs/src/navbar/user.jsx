@@ -3,13 +3,15 @@ import Home from '../components/home';
 import Dashboard from '../components/dashboard';
 import AuthUser from '../components/AuthUser';
 
-export default function Auth() {
+export default function User() {
     const {token, logout} = AuthUser();
     const logoutUser = () => {
         if(token != undefined){
             logout();
         }
     }
+    if (AuthUser().user.role != 'admin') 
+    {
     return (<div className="App">
         <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -45,4 +47,5 @@ export default function Auth() {
             </Routes>
         </div>
     </div>)
+}
 }
