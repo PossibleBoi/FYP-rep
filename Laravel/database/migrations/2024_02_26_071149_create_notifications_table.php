@@ -16,20 +16,19 @@ return new class extends Migration
             $table->string('type');
             $table->unsignedBigInteger('projectid')->nullable();
 
-            $table->foreign('projectid')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('projectID')->references('projectID')->on('projects')->onDelete('cascade');
 
             // You may include additional columns as needed for the notifications table.
 
             $table->timestamps();
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('notification');
+        Schema::dropIfExists('notifications');
     }
 };

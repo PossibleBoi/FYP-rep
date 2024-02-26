@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('genre', function (Blueprint $table) {
-            $table->id('genreID');
-            $table->string('name');
+        Schema::create('project_genre', function (Blueprint $table) {
+            $table->id('genreid');
+            $table->unsignedBigInteger('projectid');
+
+            $table->foreign('genreID')->references('genreID')->on('genre');
+            $table->foreign('projectID')->references('projectID')->on('projects');
 
             $table->timestamps();
         });
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_genre');
+        Schema::dropIfExists('project_genre');
     }
 };

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('search_tags', function (Blueprint $table) {
-            $table->id('searchID');
+        Schema::create('updates', function (Blueprint $table) {
+            $table->id('updateID');
             $table->unsignedBigInteger('projectID');
-            $table->json('keywords'); 
-
-            $table->foreign('projectID')->references('id')->on('projects');
-
+            $table->text('content');
             $table->timestamps();
+
+            $table->foreign('projectID')->references('projectID')->on('projects');
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_search_tags');
+        Schema::dropIfExists('updates');
     }
 };

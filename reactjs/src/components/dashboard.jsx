@@ -57,7 +57,6 @@ export default function Dashboard() {
                                     Blogs
                                 </Link>
                             </li>
-                            {/* ... Rest of the navigation items */}
                         </ul>
                     </div>
                 </div>
@@ -132,7 +131,6 @@ export default function Dashboard() {
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white">
-                                            {/* ... (table rows) */}
                                         </tbody>
                                     </table>
                                 </div>

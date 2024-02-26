@@ -3,7 +3,7 @@ import Home from '../components/home';
 import Dashboard from '../components/dashboard';
 import AuthUser from '../components/AuthUser';
 
-export default function Admin() {
+export default function AdminNav() {
     const { token, logout, user } = AuthUser();
     const logoutUser = () => {
         if (token != undefined) {

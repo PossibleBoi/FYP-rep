@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_genre', function (Blueprint $table) {
-            $table->id('genreid');
-            $table->unsignedBigInteger('projectid');
+        Schema::create('user_notification', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('userid');
+            $table->unsignedBigInteger('notificationid');
 
-            $table->foreign('genreid')->references('genreID')->on('genre');
-            $table->foreign('projectid')->references('id')->on('projects');
+            $table->foreign('userid')->references('id')->on('users');
+            $table->foreign('notificationid')->references('notificationid')->on('notifications');
 
             // You may include additional columns as needed for this pivot table.
-
+            
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_genre');
+        Schema::dropIfExists('user_notifications');
     }
 };

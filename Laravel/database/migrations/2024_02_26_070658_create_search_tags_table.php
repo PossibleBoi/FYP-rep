@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rewards', function (Blueprint $table) {
-            $table->id('rewardID');
-            $table->string('title');
-            $table->text('description');
-            $table->decimal('minimumamount', 10, 2);
-            $table->timestamp('estimated_delivery');
+        Schema::create('search_tags', function (Blueprint $table) {
+            $table->id('searchID');
             $table->unsignedBigInteger('projectID');
+            $table->json('keywords'); // Assuming you want to store an array of keywords as JSON
 
-            $table->foreign('projectID')->references('id')->on('projects');
+            $table->foreign('projectID')->references('projectID')->on('projects');
 
             $table->timestamps();
         });
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rewards');
+        Schema::dropIfExists('search_tags');
     }
 };
