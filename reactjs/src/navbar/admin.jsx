@@ -1,6 +1,6 @@
 import { Route, Routes, Link } from 'react-router-dom';
 import Home from '../components/home';
-import Dashboard from '../components/dashboard';
+import Dashboard from '../Dashboard/dashboard';
 import AuthUser from '../components/AuthUser';
 
 export default function AdminNav() {

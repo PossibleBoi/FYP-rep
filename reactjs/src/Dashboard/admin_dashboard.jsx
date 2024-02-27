@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import AuthUser from "../AuthUser";
+import AuthUser from "../components/AuthUser";
 
 export default function AdminDashboard() {
     const { user } = AuthUser();

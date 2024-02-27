@@ -3,7 +3,7 @@ import Home from '../components/home';
 import Login from '../components/login';
 import Register from '../components/register';
 
-export default function Guest(){
+export default function GuestNav(){
     return (
         <div className="App">
           <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">

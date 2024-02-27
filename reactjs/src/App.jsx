@@ -1,13 +1,13 @@
+import React from 'react'
 import './App.css';
 import AuthUser from './components/AuthUser';
-import Guest from './navbar/guest';
-import Auth from './navbar/user';
-import Admin from './navbar/admin';
+import GuestNav from './Navbar/guest';
+import Auth from './Navbar/navigation';
 
 function App() {
   const { getToken } = AuthUser();
   if (!getToken()) {
-    return <Guest />
+    return <GuestNav/>
   }
   else{
     return <Auth/>
