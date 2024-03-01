@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import AuthUser from "../components/AuthUser";
-
-const user = AuthUser();
+import React from 'react';
+import AuthUser from '../Authentication/AuthUser';
 
 export default function UserDashboard() {
+
+    const { user } = AuthUser();
+
     return (
         <>
             <h1>Dashboard</h1>
@@ -13,7 +13,7 @@ export default function UserDashboard() {
             Email : {user.email}
             <br />
             Role: {user.role}
-
         </>
     )
+
 }

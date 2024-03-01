@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import { useState } from 'react';
+import Dashboard from '../Dashboard/dashboard';
 
 export default function AuthUser(){
     const navigate = useNavigate();
@@ -27,8 +28,14 @@ export default function AuthUser(){
         sessionStorage.setItem("user", JSON.stringify(user));
 
         setUser(user);
-        setToken(token);
-        navigate('/dashboard');
+        const saveToken = (user, token) => {
+            sessionStorage.setItem("token", JSON.stringify(token));
+            sessionStorage.setItem("user", JSON.stringify(user));
+
+            setUser(user);
+            setToken(token);
+            navigate("/dashboard");
+        }
     }
 
     const logout = () => {

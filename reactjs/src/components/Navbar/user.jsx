@@ -1,18 +1,15 @@
 import { Route, Routes, Link } from 'react-router-dom';
-import Home from '../components/home';
+import Home from '../Authentication/home';
 import Dashboard from '../Dashboard/dashboard';
-import AuthUser from '../components/AuthUser';
+import AuthUser from '../Authentication/AuthUser';
 
-export default function AdminNav() {
+export default function UserNav() {
     const { token, logout, user } = AuthUser();
     const logoutUser = () => {
         if (token != undefined) {
             logout();
         }
     }
-
-    if (user.role == 'admin' )
-    {
         return (
             <div className="App">
                 <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
@@ -33,7 +30,7 @@ export default function AdminNav() {
                                     <Link to="/" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Home</Link>
                                 </li>
                                 <li>
-                                    <Link to="/dashboard" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Admin Dashboard</Link>
+                                    <Link to="/dashboard" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Dashboard</Link>
                                 </li>
                                 <li>
                                     <Link onClick={logoutUser} class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Logout</Link>
@@ -50,4 +47,3 @@ export default function AdminNav() {
                 </div>
             </div>)
     }
-}

@@ -14,7 +14,7 @@ export default function Login() {
             password: password
         }).then((response) => {
             setToken(response.data.user, response.data.access_token);
-            console.log(response.data);
+            console.log(response.data.message);
         }).catch((error) => {
             console.log(error);
         })

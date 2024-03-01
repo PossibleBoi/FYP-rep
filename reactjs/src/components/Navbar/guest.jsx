@@ -1,7 +1,7 @@
 import {Route, Routes, Link} from 'react-router-dom';
-import Home from '../components/home';
-import Login from '../components/login';
-import Register from '../components/register';
+import Home from '../Authentication/home';
+import Login from '../Authentication/login';
+import Register from '../Authentication/register';
 
 export default function GuestNav(){
     return (

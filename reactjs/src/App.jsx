@@ -1,16 +1,17 @@
 import React from 'react'
 import './App.css';
-import AuthUser from './components/AuthUser';
-import GuestNav from './Navbar/guest';
-import Auth from './Navbar/navigation';
+import AuthUser from './components/Authentication/AuthUser';
+import GuestNav from './components/Navbar/guest';
+import Navigation from './components/Navbar/navigation';
 
-function App() {
+function App() 
+{
   const { getToken } = AuthUser();
   if (!getToken()) {
     return <GuestNav/>
   }
   else{
-    return <Auth/>
+    return <Navigation/>
   }
 }
 

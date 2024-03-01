@@ -1,17 +1,16 @@
-import AuthUser from '../components/AuthUser';
+import AuthUser from '../Authentication/AuthUser';
 import AdminNav from './admin';
 import GuestNav from './guest';
 import UserNav from './user';
 
-
-export default function Auth() {
-    if (AuthUser().user.role === 'admin') {
+export default function Navigation() {
+    if (AuthUser().user.role == 'admin') {
         return <AdminNav />
     }
-    else if (AuthUser().user.role === 'user') {
+    else if (AuthUser().user.role == 'user') {
         return <UserNav />
     }
-    else if(AuthUser().user.role === 'starter'){
+    else if(AuthUser().user.role == 'starter'){
         return (
             <div>
                 <h1>Starter</h1>
