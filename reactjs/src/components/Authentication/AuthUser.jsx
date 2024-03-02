@@ -1,60 +1,56 @@
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import Dashboard from '../Dashboard/dashboard';
 
-export default function AuthUser(){
+export default function AuthUser() {
     const navigate = useNavigate();
 
-    
+
     const getToken = () => {
         const tokenString = sessionStorage.getItem("token");
         const userToken = JSON.parse(tokenString);
         return userToken;
     }
-    
+
     const getUser = () => {
         const userString = sessionStorage.getItem("user");
         const userDetails = JSON.parse(userString);
         return userDetails;
     }
-    
-    const [token,setToken] = useState(getToken());
-    const [user,setUser] = useState(getUser());
 
-    const saveToken = (user,token) => {
+    const [token, setToken] = useState(getToken());
+    const [user, setUser] = useState(getUser());
 
+    const saveToken = (user, token) => {
+
+
+        setUser(user);
         sessionStorage.setItem("token", JSON.stringify(token));
         sessionStorage.setItem("user", JSON.stringify(user));
 
         setUser(user);
-        const saveToken = (user, token) => {
-            sessionStorage.setItem("token", JSON.stringify(token));
-            sessionStorage.setItem("user", JSON.stringify(user));
-
-            setUser(user);
-            setToken(token);
-            navigate("/dashboard");
-        }
+        setToken(token);
+        navigate("/dashboard");
     }
+
 
     const logout = () => {
         sessionStorage.clear();
     }
 
     const http = axios.create({
-        baseURL : "http://127.0.0.1:8000/api",
-        headers : {
+        baseURL: "http://127.0.0.1:8000/api",
+        headers: {
             "Content-type": "application/json",
         }
     })
 
-    return{
-        setToken:saveToken,
+    return {
+        setToken: saveToken,
         token,
         user,
         getToken,
         http,
         logout,
     }
-}
+}   
