@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, Navigate, redirect } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import AuthUser from "./AuthUser";
 
 export default function Register() {
+    const navigate = useNavigate();
     const { http } = AuthUser();
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -12,7 +13,7 @@ export default function Register() {
     const submitForm = (e) => {
         e.preventDefault();
         http.post('/register', { name:name, email: email, password: password, confirm_password: confirmPassword }).then((response) => {
-        return redirect('/login');
+        navigate('/login');
         }).catch((error) => {   
             console.log(error);
         });
