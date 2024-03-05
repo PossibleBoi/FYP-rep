@@ -29,8 +29,8 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('me',  [AuthController::class, 'me']);
 });
 
-Route::group(['middleware'=>['auth:api','prefix'=>'admin']], function(){
-    Route::get('users', [AdminController::class, 'users']);
-    Route::get('user/{id}', [AdminController::class, 'user']);
-    Route::put('user/{id}', [AdminController::class, 'updateUser']);
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('admin/users', [AdminController::class, 'users']);
+    Route::get('user/{id}', [AdminController::class, '']);
+    Route::put('user/{id}', [AdminController::class, '']);
 });
