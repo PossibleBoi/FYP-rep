@@ -1,11 +1,10 @@
-import { Route, useNavigate ,Routes, Link } from 'react-router-dom';
+import { Route, Routes, Link } from 'react-router-dom';
 import Home from '../Authentication/home';
 import Dashboard from '../Dashboard/dashboard';
 import AuthUser from '../Authentication/AuthUser';
 
 export default function UserNav() {
-    const { token, logout, user } = AuthUser();
-    const navigate = useNavigate();
+    const { token, logout } = AuthUser();
     const logoutUser = () => {
         if (token != undefined) {
             logout();

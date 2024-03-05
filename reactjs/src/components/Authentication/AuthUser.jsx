@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { all } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Cookies from 'js-cookies';
@@ -36,8 +36,8 @@ export default function AuthUser() {
 
 
     const logout = () => {
-        Cookies.remove('token');
-        navigate("/login");
+        navigate("/dashboard");
+        // Cookies.removeItem('token');
     }
 
     const http = axios.create({
