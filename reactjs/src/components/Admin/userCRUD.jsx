@@ -1,16 +1,15 @@
-import { React, useState, ReactDOM, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
+import { Link, redirect, useNavigate } from "react-router-dom";
 
 export default function UserCRUD() {
     const { http } = AuthUser();
     const [users, setUsers] = useState([]);
-
-    // console.log('user token:'+ token)
-
+    const navigate = useNavigate();
+    
     const AllData = () => {
-        http.get('/admin/users')
+        http.get('/admin/users',{headers: { 'Content-Type': 'application/json' }})
             .then((response) => {
-                console.log(response.data[0]);
                 setUsers(response.data[0]);
             })
             .catch((error) => {
@@ -18,9 +17,18 @@ export default function UserCRUD() {
             });
     };
 
+    const editUser = (id) => {
+        http.get(`/admin/users/edit/${id}`).then((response) => {
+            navigate('/admin/users/edit', { state: response.data[0] });
+        }).catch((error) => {         
+            console.log(error);
+        });
+    }
+
     useEffect(() => {
         AllData();
     }, []);
+
 
 
     return (
@@ -67,14 +75,16 @@ export default function UserCRUD() {
                                             {user.location}
                                         </td>
                                         <td className="px-6 py-4">
-                                            Active
+                                            {user.status}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                            <Link>
+                                            <a onClick={() => editUser(user.id)}  className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                 <span className="bg-blue-100 text-blue-800 text-1xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
                                                     Edit
                                                 </span>
                                             </a>
+                                            </Link>
                                         </td>
                                     </tr>
                                 ))

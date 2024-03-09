@@ -1,10 +1,9 @@
 import { Route, Routes, Link, useLocation } from 'react-router-dom';
-import Home from '../Authentication/home';
-import Dashboard from '../Dashboard/dashboard';
 import AuthUser from '../Authentication/AuthUser';
 import UserCRUD from "../Admin/userCRUD";
 import AdminDashboard from '../Dashboard/admin_dashboard';
 import ProjectCRUD from '../Admin/projectCRUD';
+import UserEDIT from '../Admin/userEDIT';
 
 export default function AdminNav() {
     const { token, logout, user } = AuthUser();
@@ -15,19 +14,19 @@ export default function AdminNav() {
     }
     return (
         <div className="flex h-screen">
-            <div className="px-4 py-2 bg-gray-200 bg-indigo-600">
+            <div className="p-2 bg-gray-200 bg-indigo-600">
                 <svg xmlns="http://www.w3.org/2000/svg" className="inline w-8 h-8 text-white lg:hidden" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
                 <div className="hidden lg:block">
                     <div className="my-2 mb-6">
-                        <h1 className="px-2 text-3xl font-bold text-white">Admin:<br />{user.name}</h1>
+                        <h1 className="px-2 text-3xl font-bold text-white">Admin: &#160; &#160; &#160; &#160; <br />{user.name}</h1>
                     </div>
                     <ul className="px-1 bg-gray-200 bg-indigo-600 grid">
                         <li className="mb-2 rounded hover:shadow hover:bg-gray-800">
                             <Link to="/dashboard" className="inline-block w-full h-full px-3 py-2 font-bold text-white">
-                                <svg className="inline-block w-6 h-6 mr-2 -mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <svg className="inline-block w-6 h-6 mr-2 mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v15c0 .6.4 1 1 1h15M8 16l2.5-5.5 3 3L17.3 7 20 9.7" />
                                 </svg>
                                 Dashboard
@@ -74,13 +73,13 @@ export default function AdminNav() {
                             </Link>
                         </li>
                         <li className="mb-2 rounded hover:shadow hover:bg-gray-800">
-                            <Link onClick={logoutUser} className="inline-block w-full h-full px-3 py-2 font-bold text-white">
+                            <label onClick={logoutUser} className="inline-block w-full h-full px-3 py-2 font-bold text-white">
                                 <svg className="inline-block w-6 h-6 mr-2 -mt-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18 18 6m0 12L6 6" clipRule="evenodd" />
                                 </svg>
                                 Logout
-                            </Link>
+                            </label>
                         </li>
                     </ul>
                 </div>
@@ -90,6 +89,7 @@ export default function AdminNav() {
                     <Route path="/dashboard" element={<AdminDashboard />} />
                     <Route path="/admin/users" element={<UserCRUD />} />
                     <Route path="/admin/projects" element={<ProjectCRUD />} />
+                    <Route path="/admin/users/edit" element={<UserEDIT />} />
                 </Routes>
             </div>
         </div>

@@ -26,18 +26,18 @@ export default function AuthUser() {
 
 
         setUser(user);
-        Cookies.setItem("token", JSON.stringify(token));
-        Cookies.setItem("user", JSON.stringify(user));
+        Cookies.setItem("token", JSON.stringify(token), );
+        Cookies.setItem("user", JSON.stringify(user), );
 
         setUser(user);
         setToken(token);
         navigate("/dashboard");
     }
 
-
     const logout = () => {
-        navigate("/dashboard");
-        // Cookies.removeItem('token');
+        Cookies.removeItem('user');  
+        Cookies.removeItem('token');
+        navigate("/");
     }
 
     const http = axios.create({

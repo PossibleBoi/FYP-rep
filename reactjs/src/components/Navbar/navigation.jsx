@@ -10,12 +10,6 @@ export default function Navigation() {
     else if (AuthUser().user.role == 'user') {
         return <UserNav />
     }
-    else if(AuthUser().user.role == 'starter'){
-        return (
-            <div>
-                <h1>Starter</h1>
-            </div>)
-    }
     else
     {
         return <GuestNav />

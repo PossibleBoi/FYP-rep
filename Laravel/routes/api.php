@@ -31,6 +31,9 @@ Route::group(['middleware' => 'api'], function () {
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('admin/users', [AdminController::class, 'users']);
-    Route::get('user/{id}', [AdminController::class, '']);
-    Route::put('user/{id}', [AdminController::class, '']);
+    Route::get('admin/users/edit/{id}', [AdminController::class, 'user_edit']);
+    Route::put('admin/user/edit/{id}/status', [AdminController::class, 'user_status']);
+    Route::put('admin/user/edit/{id}/role', [AdminController::class, 'user_role']);
+    Route::put('admin/user/edit/{id}/information', [AdminController::class, 'user_info']);
+
 });
