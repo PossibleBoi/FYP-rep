@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\User;
 
@@ -15,6 +16,13 @@ class AdminController extends Controller
     public function users()
     {
         $users = User::select('id', 'name','role','email', 'location', 'status')->get();
+        return response()->json([
+            $users
+        ]);
+    }
+
+    public function users_total(){
+        $users = User::all()->count();
         return response()->json([
             $users
         ]);
@@ -61,4 +69,26 @@ class AdminController extends Controller
             'message' => 'User information updated successfully'
         ]);
     }
+
+
+    public function add_project_genre()
+    {
+        $genre = request('genre');
+     
+        Genre::create([
+            'name' => $genre
+        ]);
+
+        return response()->json(['message' => 'Successfully added genre']);
+
+    }
+
+    public function project_genre()
+    {
+        $genre = Genre::all();
+        return response()->json([
+            $genre
+        ]);
+    }
 }
+

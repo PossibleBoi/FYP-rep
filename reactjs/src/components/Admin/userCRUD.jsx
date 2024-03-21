@@ -19,7 +19,7 @@ export default function UserCRUD() {
 
     const editUser = (id) => {
         http.get(`/admin/users/edit/${id}`).then((response) => {
-            navigate('/admin/users/edit', { state: response.data[0] });
+            navigate(`/admin/users/edit/`, { state: response.data[0] });
         }).catch((error) => {         
             console.log(error);
         });

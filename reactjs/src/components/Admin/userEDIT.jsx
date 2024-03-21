@@ -13,24 +13,37 @@ export default function UserEDIT() {
     const [email, setEmail] = useState(userData.email);
     const [user_location, setLocation] = useState(userData.location);
 
-    const handleInformationChanges = () => {
-        setName(document.getElementById('name').value);
-        setEmail(document.getElementById('email').value);
-        setLocation(document.getElementById('user_location').value);
 
+    const handleInformationChanges = () => {
+        // Update the user information when the button is clicked
         http.put(`admin/user/edit/${userData.id}/information`, {
             name: name,
             email: email,
             location: user_location
-        })
-    }
+            
+        }).then((response) => {
+            console.log(response.data);
+            // popup for successful update
+        }).catch((error) => {
+            console.error(error);
+            // popup for error
+        });
+    };
+
     // Role changes
-    const roles = ["user", "starter", "admin"];
+    const roles = ["user", "admin"];
     const [selectedRole, setSelectedRole] = useState(userData.role);
 
     const handleRoleChange = (e) => {
         setSelectedRole(e.target.value);
-        http.put(`admin/user/edit/${userData.id}/role`, { role: e.target.value })
+        http.put(`admin/user/edit/${userData.id}/role`, { role: e.target.value }).
+            then((response) => {
+                console.log(response.data);
+                //  popup for successful update 
+            }).catch((error) => {
+                console.error(error);
+                // popup for error 
+            });
     };
 
     // Status changes
@@ -48,11 +61,13 @@ export default function UserEDIT() {
         http.put(`admin/user/edit/${userData.id}/status`, { status: newStatus })
             .then((response) => {
                 console.log(response.data);
+                // popup for sucess
             })
+            .catch((error) => {
+                console.error(error);
+                // popup for error
+            });
     };
-
-    //Pop up for changes
-   
 
     return (
         <>
@@ -83,12 +98,12 @@ export default function UserEDIT() {
                             {userData != null ? (
                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            onChange={handleInformationChanges} id='name' type="text" defaultValue={userData.name} />
+                                        <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        onChange={(e)=> setName(e.target.value)} type="text" defaultValue={userData.name} />
                                     </td>
                                     <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            onChange={handleInformationChanges} id='email' type="text" defaultValue={userData.email} />
+                                            onChange={(e)=> setEmail(e.target.value)} type="text" defaultValue={userData.email} />
                                     </td>
                                     <td className="px-6 py-4">
                                         <select
@@ -105,7 +120,7 @@ export default function UserEDIT() {
                                     </td>
                                     <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            onChange={handleInformationChanges} id='user_location' type="text" defaultValue={userData.location} />
+                                              onChange={(e)=> setLocation(e.target.value)} type="text" defaultValue={userData.location} />
                                     </td>
                                     <td className="px-6 py-4">
                                         <label className="inline-flex items-center me-5 cursor-pointer">
@@ -141,11 +156,14 @@ export default function UserEDIT() {
                         </tbody>
                     </table>
                 </div>
-                <div className="mt-3">
-                    <a href="/admin/users" className="inline-block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                        Back
-                    </a>
-                </div>
+            <div className="mt-3">
+                <button onClick={handleInformationChanges} className="inline-block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Update Information
+                </button>
+                <Link to="/admin/users" className="inline-block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Back
+                </Link>
+            </div>
             </div>
         </>
     )

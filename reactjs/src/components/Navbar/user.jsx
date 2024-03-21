@@ -3,6 +3,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 import Home from '../Authentication/home';
 import AuthUser from '../Authentication/AuthUser';
 import Dashboard from '../Dashboard/dashboard';
+import Project_Creation from '../User/create_project';
 
 export default function UserNav() {
     const { user, token, logout } = AuthUser();
@@ -29,8 +30,10 @@ export default function UserNav() {
                         <div class="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
                             <ul class="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
                                 <li className="relative group">
-                                    <button type="button" class="text-xs text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                        Create Project</button>
+                                    <Link to={"/create_project"} class="block py-2">
+                                        <button type="button" class="text-xs text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                            Create Project</button>
+                                    </Link>
                                 </li>
                                 <li>
                                     <Link to="/" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Home</Link>
@@ -95,6 +98,7 @@ export default function UserNav() {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/create_project" element={<Project_Creation />} />
                     </Routes>
                 </div>
             </div>

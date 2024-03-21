@@ -89,7 +89,7 @@ export default function AdminNav() {
                     <Route path="/dashboard" element={<AdminDashboard />} />
                     <Route path="/admin/users" element={<UserCRUD />} />
                     <Route path="/admin/projects" element={<ProjectCRUD />} />
-                    <Route path="/admin/users/edit" element={<UserEDIT />} />
+                    <Route path="/admin/users/edit/" element={<UserEDIT />} />
                 </Routes>
             </div>
         </div>
