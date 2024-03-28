@@ -18,7 +18,8 @@ class Projects extends Model
         'status',
         'funding_goal',
         'cover_image',
-        'user_id'
+        'genre_id',
+        'creator_id'
     ];
 
     protected $table = "projects";

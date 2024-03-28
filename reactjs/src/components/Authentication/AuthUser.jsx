@@ -6,7 +6,6 @@ import Cookies from 'js-cookies';
 export default function AuthUser() {
     const navigate = useNavigate();
 
-
     const getToken = () => {
         const tokenString = Cookies.getItem("token");
         const userToken = JSON.parse(tokenString);
@@ -23,20 +22,17 @@ export default function AuthUser() {
     const [user, setUser] = useState(getUser());
 
     const saveToken = (user, token) => {
-
-
         setUser(user);
-        Cookies.setItem("token", JSON.stringify(token), );
-        Cookies.setItem("user", JSON.stringify(user), );
-
+        Cookies.setItem("token", JSON.stringify(token), { SameSite: 'None' });
+        Cookies.setItem("user", JSON.stringify(user), { SameSite: 'None' });
         setUser(user);
         setToken(token);
         navigate("/dashboard");
     }
 
     const logout = () => {
-        Cookies.removeItem('user');  
-        Cookies.removeItem('token');
+        Cookies.removeItem('user', { SameSite: 'None' });  
+        Cookies.removeItem('token', { SameSite: 'None' });
         navigate("/");
     }
 
@@ -44,7 +40,7 @@ export default function AuthUser() {
         baseURL: "http://127.0.0.1:8000/api",
         headers: {
             "Authorization": `Bearer ${token}`,
-            "Content-type": "application/json",
+            "Content-type": ["application/json","multipart/form-data"],
             "Access-Control-Allow-Origin": "*",
         }
     })

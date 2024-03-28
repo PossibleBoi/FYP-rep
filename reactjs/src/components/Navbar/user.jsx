@@ -4,6 +4,7 @@ import Home from '../Authentication/home';
 import AuthUser from '../Authentication/AuthUser';
 import Dashboard from '../Dashboard/dashboard';
 import Project_Creation from '../User/create_project';
+import User_Projects from '../User/user_projects';
 
 export default function UserNav() {
     const { user, token, logout } = AuthUser();
@@ -70,7 +71,7 @@ export default function UserNav() {
                                                 Dashboard
                                             </Link>
                                             <Link
-                                                to="#"
+                                                to="/my_projects"
                                                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                             >
                                                 My Projects
@@ -99,6 +100,7 @@ export default function UserNav() {
                         <Route path="/" element={<Home />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/create_project" element={<Project_Creation />} />
+                        <Route path="/my_projects" element={<User_Projects />} />
                     </Routes>
                 </div>
             </div>
