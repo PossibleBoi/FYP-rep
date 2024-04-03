@@ -1,4 +1,4 @@
-import { useState, React } from "react";
+import {useState, React } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AuthUser from "../Authentication/AuthUser";
 
@@ -8,21 +8,28 @@ export default function UserEDIT() {
     const location = useLocation();
     const userData = location.state;
 
-    //Info changes
-    const [name, setName] = useState(userData.name);
-    const [email, setEmail] = useState(userData.email);
-    const [user_location, setLocation] = useState(userData.location);
+    const [name, setName] = useState(userData ? userData.name : '');
+    const [email, setEmail] = useState(userData ? userData.email : '');
+    const [user_location, setLocation] = useState(userData ? userData.location : '');
 
+    const roles = ["user", "admin"];
+    const [selectedRole, setSelectedRole] = useState(userData ? userData.role : '');
+
+    const [isActive, setIsActive] = useState(userData ? userData.status === "active" : false);
+    const newStatus = isActive ? "inactive" : "active";
 
     const handleInformationChanges = () => {
         // Update the user information when the button is clicked
-        http.put(`admin/user/edit/${userData.id}/information`, {
+        http.put(`admin/user/edit/${userData.id}`, {
             name: name,
             email: email,
-            location: user_location
+            role: selectedRole,
+            location: user_location,
+            status: newStatus
             
         }).then((response) => {
             console.log(response.data);
+            window.location.href = '/admin/users';
             // popup for successful update
         }).catch((error) => {
             console.error(error);
@@ -30,31 +37,12 @@ export default function UserEDIT() {
         });
     };
 
-    // Role changes
-    const roles = ["user", "admin"];
-    const [selectedRole, setSelectedRole] = useState(userData.role);
-
-    const handleRoleChange = (e) => {
-        setSelectedRole(e.target.value);
-        http.put(`admin/user/edit/${userData.id}/role`, { role: e.target.value }).
-            then((response) => {
-                console.log(response.data);
-                //  popup for successful update 
-            }).catch((error) => {
-                console.error(error);
-                // popup for error 
-            });
-    };
-
-    // Status changes
-    const [isActive, setIsActive] = useState(userData.status === "active");
 
     // Function to handle status toggle
     const handleToggleStatus = () => {
-        const newStatus = isActive ? "inactive" : "active";
         updateUserStatus(newStatus);
         setIsActive(!isActive);
-    };
+};
 
     // Function to update user status
     const updateUserStatus = (newStatus) => {
@@ -108,7 +96,7 @@ export default function UserEDIT() {
                                     <td className="px-6 py-4">
                                         <select
                                             value={selectedRole}
-                                            onChange={handleRoleChange}
+                                            onChange={(e)=>setSelectedRole(e.target.value)}
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         >
                                             {roles.map((role) => (

@@ -40,17 +40,27 @@ export default function AuthUser() {
         baseURL: "http://127.0.0.1:8000/api",
         headers: {
             "Authorization": `Bearer ${token}`,
-            "Content-type": ["application/json","multipart/form-data"],
+            "Content-type": ["application/json"],
             "Access-Control-Allow-Origin": "*",
         }
     })
-
+    
+    const httpForm = axios.create({
+            baseURL: "http://127.0.0.1:8000/api",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-type": ["application/json" , "multipart/form-data"],
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+    
     return {
         setToken: saveToken,
         token,
         user,
         getToken,
         http,
+        httpForm,
         logout,
     }
 }   

@@ -13,25 +13,10 @@ class AdminController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function users()
-    {
-        $users = User::select('id', 'name','role','email', 'location', 'status')->get();
-        return response()->json([
-            $users
-        ]);
-    }
-
-    public function users_total(){
-        $users = User::all()->count();
-        return response()->json([
-            $users
-        ]);
-    }
-
-    public function user_edit($id)
+    public function user_edit(Request $request)
     {
         $user = User::select('id', 'name', 'role', 'email', 'location', 'status')
-        ->find($id);
+        ->find($request->id);
         
         return response()->json([
             $user
@@ -48,22 +33,15 @@ class AdminController extends Controller
         ]);
     }
     
-    public function user_role(Request $request, $id)
+    public function user_update(Request $request, $id)
     {
+       
         $user = User::find($id);
-        $user->role = $request->role;
-        $user->save();
-        return response()->json([
-            'message' => 'User role updated successfully'
-        ]);
-    }
 
-    public function user_info(Request $request, $id)
-    {
-        $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->location = $request->location;
+        $user->role = $request->role;
         $user->save();
         return response()->json([
             'message' => 'User information updated successfully'

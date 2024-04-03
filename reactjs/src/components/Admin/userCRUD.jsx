@@ -19,7 +19,7 @@ export default function UserCRUD() {
 
     const editUser = (id) => {
         http.get(`/admin/users/edit/${id}`).then((response) => {
-            navigate(`/admin/users/edit/`, { state: response.data[0] });
+            navigate(`/admin/users/edit/${id}`, { state: response.data[0] });
         }).catch((error) => {         
             console.log(error);
         });
@@ -79,7 +79,7 @@ export default function UserCRUD() {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <Link>
-                                            <a onClick={() => editUser(user.id)}  className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                            <a href={`admin/user/edit/${user.id}`} onClick={() => editUser(user.id)}  className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                                 <span className="bg-blue-100 text-blue-800 text-1xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
                                                     Edit
                                                 </span>
