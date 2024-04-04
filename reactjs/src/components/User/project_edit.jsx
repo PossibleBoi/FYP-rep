@@ -1,76 +1,104 @@
 import React, { useEffect, useState } from 'react';
 import AuthUser from '../Authentication/AuthUser';
 
-export default function Project_Edit_View() { //with edit button for the creator
+export default function Project_Edit_View() {
     const { http } = AuthUser();
-    const project_id = window.location.pathname.split('/')[4];
+    const project_id = window.location.pathname.split('/')[2];
     const [project, setProject] = useState([]);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [editing, setEditing] = useState(false);
+    const [editedTitle, setEditedTitle] = useState('');
+    const [editedDescription, setEditedDescription] = useState('');
+    const [editedImages, setEditedImages] = useState([]);
 
     useEffect(() => {
         http.get(`/user/project/${project_id}`).then((response) => {
             setProject(response.data.project[0]);
+            setEditedTitle(response.data.project[0].project_title);
+            setEditedDescription(response.data.project[0].description);
+            setEditedImages([...response.data.project[0].images]);
         }).catch((error) => {
             console.error(error);
         });
     }, []);
 
-    const handleNextImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % project.images.length);
+    const handleDeleteImage = (index) => {
+        const updatedImages = [...editedImages];
+        updatedImages.splice(index, 1);
+        setEditedImages(updatedImages);
     };
 
-    const handlePrevImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + project.images.length) % project.images.length);
+    const handleEdit = () => {
+        setEditing(true);
+    };
+
+    const handleSave = () => {
+        // Handle saving the edited title, description, and images
+        setEditing(false);
+        // Make API call to save the edited data
+    };
+
+    const handleCancel = () => {
+        setEditing(false);
+        // Reset edited title, description, and images to original
+        setEditedTitle(project.project_title);
+        setEditedDescription(project.description);
+        setEditedImages([...project.images]);
+    };
+
+    const handleChangeTitle = (e) => {
+        setEditedTitle(e.target.value);
+    };
+
+    const handleChangeDescription = (e) => {
+        setEditedDescription(e.target.value);
     };
 
     return (
-        <div className="grid grid-cols-2 gap-4 p-4">
-            {/* Left Column - Image */}
-            <div className="bg-white p-4 rounded shadow-md">
-                {/* Title */}
-                <div className="p-4">
-                    <h2 className="text-xl font-bold mb-4">{project.project_title}</h2>
-                </div>
-                {/* Image Carousel */}
-                <div className="relative p-4 overflow-hidden">
-                    {project.images && project.images.length > 0 && (
-                        <img
-                            src={`http://localhost:8000/${project.images[currentImageIndex].image}`}
-                            alt="Project Image"
-                            className="object-contain w-full h-auto rounded cursor-pointer"
-                            onClick={handleNextImage}
-                        />
-                    )}
-                    {/* Next Button */}
-                    <button
-                        className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white font-bold py-2 px-4 rounded-full bg-gray-700"
-                        onClick={handleNextImage}
-                    >
-                        &rarr;
-                    </button>
-                    {/* Previous Button */}
-                    <button
-                        className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white font-bold py-2 px-4 rounded-full bg-gray-700"
-                        onClick={handlePrevImage}
-                    >
-                        &larr;
-                    </button>
-                </div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
             {/* Right Column - Information */}
             <div className="bg-white p-4 rounded shadow-md">
                 {/* Edit Button */}
-                <button className="absolute left-4 bg-yellow-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                    Edit
-                </button>
-                {/* Project Description */}
-                <div className="bg-gray-100 p-4 rounded-lg mb-4">
-                    <h3 className="text-lg font-semibold mb-2">Project Type:
-                        <p>{project.type}</p>
-                    </h3>
-                    <h3 className="text-lg font-semibold mb-2">Project Description</h3>
-                    <p>{project.description}</p>
-                </div>
+
+                <>
+                    <input
+                        type="text"
+                        value={editedTitle}
+                        onChange={handleChangeTitle}
+                        className="bg-gray-100 p-2 rounded mb-4 w-full resize-none"
+                    />
+                    <textarea
+                        value={editedDescription}
+                        onChange={handleChangeDescription}
+                        className="bg-gray-100 p-2 rounded mb-4 w-full resize-none"
+                    />
+                    {/* Image List */}
+                    <div className="grid grid-cols-3 gap-4 mb-4">
+                        {editedImages.map((image, index) => (
+                            <div key={index} className="relative">
+                                <img
+                                    src={`http://localhost:8000/${image.image}`}
+                                    alt="Project Image"
+                                    className="object-cover w-full h-40 rounded"
+                                />
+                                <button
+                                    onClick={() => handleDeleteImage(index)}
+                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded-full"
+                                >
+                                    X
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex justify-end">
+                        <button onClick={handleCancel} className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded mr-2">
+                            Cancel
+                        </button>
+                        <button onClick={handleSave} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                            Save
+                        </button>
+                    </div>
+                </>
+
                 {/* Funding Information Card */}
                 <div className="bg-gray-100 p-4 rounded-lg mb-4">
                     <h3 className="text-lg font-semibold mb-2">Funding Information</h3>

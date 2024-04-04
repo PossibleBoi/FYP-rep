@@ -21,7 +21,7 @@ export default function User_Projects() {
                 {projects.length > 0 ? (
                     projects.map((project) => (
                         <div key={project.projectID} class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                            <Link to={`user/project/${project.projectID}`}>
+                            <Link to={`/project/${project.projectID}/edit`}>
                                 <img className="rounded-t-lg width h-auto max-w-full" src={`http://localhost:8000/${project.cover_image}`} alt="Image" />
                                 <div class="p-5">
                                     <a href="#">
