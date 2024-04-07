@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\morphMany;
 class Projects extends Model
 {
     use HasFactory;
-
+    protected $primaryKey = 'projectID';
     protected $fillable = [
         'project_title',
         'short_description',

@@ -63,7 +63,7 @@ class UserController extends Controller
         foreach ($otherImages as $imagePath) {
             Images::create([
                 'image' => $imagePath,
-                'image_id' => $project->id,
+                'image_id' => $project->projectID,
                 'image_type' => 'App\Projects'
             ]);
         }
@@ -74,10 +74,97 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit_project(Request $request)
+    //for project page to show the details of the project for viewing, edit view to be done through the user 
+    public function project_edit(Request $request)
     {
-        //Update send garne
-        //Data get from project controller project first for view
+
+        $project = Projects::where('ProjectID', $request->id)->get();
+
+        $genre = Genre::where('genreID', $project[0]->genre_id)->get();
+        $creator = User::where('id', $project[0]->creator_id)->get();
+        $images = Images::select(['image', 'id'])
+            ->where('image_id', $request->id)
+            ->where('image_type', 'App\Projects')
+            ->get();
+
+        $project[0]->genre = $genre[0]->name;
+        $project[0]->creator = $creator[0]->name;
+        $project[0]->creator_email = $creator[0]->email;
+        $project[0]->images = $images;
+
+        return response()->json([
+            'project' => $project,
+        ]);
     }
-   
+
+    public function updateProjectDetails(Request $request, $id)
+    {
+        $project = Projects::where('projectID', $id)->firstOrFail();
+
+        // Update project details
+        $project->project_title = $request->input('project_title') ?: 'Default Project Title';
+        $project->short_description = $request->input('short_description') ?: 'Default Short Description';
+        $project->description = $request->input('description') ?: 'Default Description';
+        $project->save();
+
+        return response()->json([
+            'message' => 'Project details updated successfully'
+        ]);
+    }
+
+    public function updateProjectImages(Request $request, $id)
+    {
+
+        $project = Projects::where('projectID', $id)->firstOrFail();
+
+        // Update cover image if changed
+        if ($request->hasFile('cover_image')) {
+            // Delete the old cover image
+            if ($project->cover_image) {
+                $oldCoverImage = public_path($project->cover_image);
+                if (file_exists($oldCoverImage)) {
+                    unlink($oldCoverImage);
+                }
+            }
+
+            $coverImage = $request->file('cover_image');
+            $filename = time() . '_' . $coverImage->getClientOriginalName();
+            $coverImage->move(public_path('/images'), $filename);
+            $project->cover_image = "images/$filename";
+            $project->save();
+        }
+
+        // Process other images
+        if ($request->hasFile('otherImages')) {
+            // Delete the old images
+            $oldImages = Images::where('image_id', $project->id)
+                ->where('image_type', 'App\\Projects')
+                ->get();
+
+            foreach ($oldImages as $oldImage) {
+                $oldImagePath = public_path($oldImage->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+                $oldImage->delete();
+            }
+
+            foreach ($request->file('otherImages') as $index => $image) {
+                $filename = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('/images'), $filename);
+                $imagePath = "images/$filename";
+
+                Images::create([
+                    'image' => $imagePath,
+                    'image_id' => $project->projectID, 
+                    'image_type' => 'App\\Projects'
+                ]);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Project images updated successfully',
+            'project' => $project,
+        ]);
+    }
 }

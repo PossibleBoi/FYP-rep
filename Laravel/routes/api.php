@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login',  [AuthController::class, 'login']);
 Route::post('register',  [AuthController::class, 'register']);
 Route::get('/home', [ProjectController::class, 'home_projects']);
-Route::get('user/project/{id}', [ProjectController::class, 'project']);
 
 Route::group(['middleware' => 'api'], function () {
     Route::post('logout', [AuthController::class, 'logout']);
@@ -55,4 +54,7 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
 Route::group(['middleware' => ['auth:api', 'user']], function () {
     Route::get('user/my_projects/{id}', [ProjectController::class, 'all_user_projects']); //get all unique user projects from this api, for all projects use the admin api route
     Route::post('user/projects/create', [UserController::class, 'add_project']);
+    Route::get('user/project/{id}', [UserController::class, 'project_edit']);
+    Route::put('user/project/{id}/details', [UserController::class, 'updateProjectDetails']);
+    Route::put('user/project/{id}/images', [UserController::class, 'updateProjectImages']);
 });

@@ -40,7 +40,7 @@ export default function AuthUser() {
         baseURL: "http://127.0.0.1:8000/api",
         headers: {
             "Authorization": `Bearer ${token}`,
-            "Content-type": ["application/json"],
+            "Content-type": "application/json",
             "Access-Control-Allow-Origin": "*",
         }
     })
@@ -49,7 +49,7 @@ export default function AuthUser() {
             baseURL: "http://127.0.0.1:8000/api",
             headers: {
                 "Authorization": `Bearer ${token}`,
-                "Content-type": ["application/json" , "multipart/form-data"],
+                "Content-type": "multipart/form-data",
                 "Access-Control-Allow-Origin": "*",
             }
         })
