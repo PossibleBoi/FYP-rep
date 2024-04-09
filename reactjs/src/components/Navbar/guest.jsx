@@ -39,7 +39,7 @@ export default function GuestNav() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path={`/all/project/:id`} element={<Project_View />} />
+          <Route path={`/project/:id`} element={<Project_View />} />
         </Routes>
       </div>
     </div>

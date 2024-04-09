@@ -36,4 +36,8 @@ class Projects extends Model
         return $this->morphMany(Images::class, 'images');
     }
 
+    public function rewards()
+    {
+        return $this->hasMany(Rewards::class);
+    }
 }

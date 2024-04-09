@@ -60,7 +60,7 @@ export default function UserNav() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/create_project" element={<Project_Creation />} />
                     <Route path=":user/my_projects" element={<User_Projects />} />
-                    <Route path={`/all/project/:id`} element={<Project_View />} />
+                    <Route path={`/project/:id`} element={<Project_View />} />
                     <Route path="/project/:project_id/edit" element={<Project_Edit/>} />
                 </Routes>
             </div>

@@ -3,12 +3,12 @@ import AuthUser from '../Authentication/AuthUser';
 
 export default function Project_View() {
     const { http } = AuthUser();
-    const project_id = window.location.pathname.split('/')[3];
+    const project_id = window.location.pathname.split('/')[2];
     const [project, setProject] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
-        http.get(`/user/project/${project_id}`).then((response) => {
+        http.get(`/project/${project_id}`).then((response) => {
             setProject(response.data.project[0]);
         }).catch((error) => {
             console.error(error);
@@ -117,6 +117,34 @@ export default function Project_View() {
                         <span className="p-2 rounded">Email: {project.creator_email}</span>
                     </div>
                 </div>
+                {/* Rewards Section */}
+                hhh
+                {project.rewards && project.rewards.length > 0 && (
+                    <div className="bg-yellow-50 p-4 rounded-lg mb-4">
+                        <h2 className="text-lg font-semibold mb-2 text-yellow-600">Rewards</h2>
+                        {project.rewards.map((reward, index) => (
+                            <div key={index} className="bg-white rounded-lg p-4 shadow-md mb-4">
+                                <div className="mb-4">
+                                    <p className="font-semibold">Title:</p>
+                                    <p>{reward.title}</p>
+                                </div>
+                                <div className="mb-4">
+                                    <p className="font-semibold">Description:</p>
+                                    <p>{reward.description}</p>
+                                </div>
+                                <div className="mb-4">
+                                    <p className="font-semibold">Amount:</p>
+                                    <p>{reward.amount}</p>
+                                </div>
+                                <div className="mb-4">
+                                    <p className="font-semibold">Delivery:</p>
+                                    <p>{reward.delivery}</p>
+                                </div>
+                                {/* Add reward images rendering here if applicable */}
+                            </div>
+                        ))}
+                    </div>
+                )}
                 {/* Progress and Discussions */}
                 <div className="bg-yellow-50 p-4 rounded-lg mb-4">
                     <h2 className="text-lg font-semibold mb-2 text-yellow-600">Progress and Discussions</h2>
@@ -124,6 +152,6 @@ export default function Project_View() {
                 </div>
             </div>
         </div>
-
     );
 }
+

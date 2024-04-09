@@ -62,6 +62,7 @@ export default function Project_Creation() {
         setRewards(updatedRewards);
     };
     const handleSubmit = (e) => {
+
         e.preventDefault();
 
         // Prepare project data
@@ -94,11 +95,11 @@ export default function Project_Creation() {
             });
     };
 
-    useEffect(() => {   
+    useEffect(() => {
         GetGenre();
     }
-    , []);
-    
+        , []);
+
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="grid grid-cols-2 gap-4">
@@ -198,7 +199,7 @@ export default function Project_Creation() {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="images" className="block text-gray-700 text-sm font-bold mb-2">Images</label>
-                                    <input type="file" id="images" onChange={(e) => setRewardImages(e.target.files)} className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" accept="image/*" />
+                                    <input type="file" id="images" onChange={(e) => setRewardImages(Array.from(e.target.files))} className="bg-white appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" accept="image/*" />
                                 </div>
                                 <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add Reward</button>
                             </form>

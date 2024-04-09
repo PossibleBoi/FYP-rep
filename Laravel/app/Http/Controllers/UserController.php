@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Genre;
 use App\Models\Images;
 use App\Models\Projects;
+use App\Models\Rewards;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -23,7 +25,9 @@ class UserController extends Controller
     {
         $coverImage = $request->file('coverImage');
 
+        // Process cover image
         if (is_array($coverImage)) {
+            // If coverImage is an array (multiple files uploaded)
             $filenameArray = [];
             foreach ($coverImage as $singleFile) {
                 $filename = time() . '_' . $singleFile->getClientOriginalName();
@@ -32,9 +36,10 @@ class UserController extends Controller
             }
             $coverImage = implode(',', $filenameArray); // Store comma-separated paths
         } else {
+            // If coverImage is a single file
             $filename = time() . '_' . $coverImage->getClientOriginalName();
             $coverImage->move(public_path('/images'), $filename);
-            $coverImage = "images\\$filename"; // Store full path
+            $coverImage = "images/$filename"; // Store full path
         }
 
         // Process other images
@@ -43,10 +48,11 @@ class UserController extends Controller
             foreach ($request->file('otherImages') as $image) {
                 $filename = time() . '_' . $image->getClientOriginalName();
                 $image->move(public_path('/images'), $filename);
-                $otherImages[] = "images\\$filename"; // Store full path
+                $otherImages[] = "images/$filename"; // Store full path
             }
         }
 
+        // Create project
         $project = Projects::create([
             'project_title' => $request->projectTitle,
             'short_description' => $request->short_description,
@@ -60,24 +66,40 @@ class UserController extends Controller
             'creator_id' => $request->user
         ]);
 
-        foreach ($otherImages as $imagePath) {
-            Images::create([
-                'image' => $imagePath,
-                'image_id' => $project->projectID,
-                'image_type' => 'App\Projects'
+        foreach ($request->rewards as $index => $rewardData) {
+            $reward = Rewards::create([
+                'title' => $rewardData['title'],
+                'description' => $rewardData['description'],
+                'amount' => is_numeric((float)$rewardData['amount']) ? $rewardData['amount'] : null,
+                'estimated_delivery' => $rewardData['delivery'],
+                'projectID' => $project->projectID,
+                'reward_image' => '' // Default value for reward_image
             ]);
+
+            // Process reward images
+            if ($request->hasFile("rewards.$index.images")) {
+                $rewardImages = $request->file("rewards.$index.images");
+                foreach ($rewardImages as $rewardImage) {
+                    $filename = time() . '_' . $rewardImage->getClientOriginalName();
+                    $rewardImage->move(public_path('/images/rewards'), $filename);
+                    $imagePath = "images/rewards/$filename";
+                    $reward->reward_image = $imagePath; // Update reward_image for each image
+                    $reward->save();
+                }
+            }
         }
 
+        // Return response indicating success
         return response()->json([
             'message' => 'Project created successfully',
             'project_type' => $request->type,
         ]);
     }
 
+
     //for project page to show the details of the project for viewing, edit view to be done through the user 
     public function project_edit(Request $request)
     {
-
         $project = Projects::where('ProjectID', $request->id)->get();
 
         $genre = Genre::where('genreID', $project[0]->genre_id)->get();
@@ -86,11 +108,13 @@ class UserController extends Controller
             ->where('image_id', $request->id)
             ->where('image_type', 'App\Projects')
             ->get();
+        $rewards = Rewards::where('projectID', $request->id)->get();
 
         $project[0]->genre = $genre[0]->name;
         $project[0]->creator = $creator[0]->name;
         $project[0]->creator_email = $creator[0]->email;
         $project[0]->images = $images;
+        $project[0]->rewards = $rewards;
 
         return response()->json([
             'project' => $project,
@@ -156,7 +180,7 @@ class UserController extends Controller
 
                 Images::create([
                     'image' => $imagePath,
-                    'image_id' => $project->projectID, 
+                    'image_id' => $project->projectID,
                     'image_type' => 'App\\Projects'
                 ]);
             }
@@ -166,5 +190,26 @@ class UserController extends Controller
             'message' => 'Project images updated successfully',
             'project' => $project,
         ]);
+    }
+
+    public function deleteProjectImages(Request $request, $id, $imageid)
+    {
+        $image = Images::find($imageid);
+
+
+        $filename = basename($image->image);
+
+        // Check if the image exists
+        if ($image) {
+            // Delete the image record from the database
+            $image->delete();
+
+            // Remove the image file from the storage folder
+            Storage::delete($filename);
+
+            return response()->json(['message' => 'Image deleted successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Image not found'], 404);
+        }
     }
 }

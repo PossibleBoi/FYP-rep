@@ -72,8 +72,6 @@ export default function Project_Edit_View() {
             }
         });
 
-        console.log(formData);
-
         // Use the POST method instead
         httpForm.post(`/user/project/${project_id}/images`, formData)
             .then((response) => {
@@ -91,6 +89,7 @@ export default function Project_Edit_View() {
 
     const handleDeleteImage = (index, imageId) => {
         // Make an API call to delete the image
+      
         http.delete(`/user/project/${project_id}/image/${imageId}`)
             .then((response) => {
                 // Remove the deleted image from state

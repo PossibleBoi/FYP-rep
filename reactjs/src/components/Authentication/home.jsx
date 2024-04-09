@@ -53,7 +53,7 @@ export default function Home() {
                         <h2 className="text-2xl font-bold mb-4">Featured Project</h2>
                         {featuredProject && (
                             <div className="bg-white border border-gray-200 rounded-lg shadow-md aspect-w-1 aspect-h-1 mb-4">
-                                <Link to={`/all/project/${featuredProject.projectID}`} className="block">
+                                <Link to={`/project/${featuredProject.projectID}`} className="block">
                                     <img className="object-cover rounded-t-lg" src={`http://localhost:8000/${featuredProject.cover_image}`} alt="Project Cover" />
                                     <div className="p-4">
                                         <h3 className="text-lg font-semibold mb-2">{featuredProject.project_title}</h3>
@@ -70,7 +70,7 @@ export default function Home() {
                             {/* Random Projects loop */}
                             {randomProjects.map((project) => (
                                 <div key={project.projectID} className="bg-white border border-gray-200 rounded-lg shadow-md">
-                                    <Link to={`/all/project/${project.projectID}`} className="block">
+                                    <Link to={`/project/${project.projectID}`} className="block">
                                         <img className="object-cover h-48 w-full rounded-t-lg" src={`http://localhost:8000/${project.cover_image}`} alt="Project Cover" />
                                         <div className="p-4">
                                             <h3 className="text-lg font-semibold mb-2">{project.project_title}</h3>
