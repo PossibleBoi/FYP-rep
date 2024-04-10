@@ -118,7 +118,6 @@ export default function Project_View() {
                     </div>
                 </div>
                 {/* Rewards Section */}
-                hhh
                 {project.rewards && project.rewards.length > 0 && (
                     <div className="bg-yellow-50 p-4 rounded-lg mb-4">
                         <h2 className="text-lg font-semibold mb-2 text-yellow-600">Rewards</h2>

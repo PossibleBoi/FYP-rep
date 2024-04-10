@@ -9,6 +9,7 @@ use App\Models\Projects;
 use App\Models\Rewards;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Termwind\Components\Raw;
 
 class UserController extends Controller
 {
@@ -32,14 +33,14 @@ class UserController extends Controller
             foreach ($coverImage as $singleFile) {
                 $filename = time() . '_' . $singleFile->getClientOriginalName();
                 $singleFile->move(public_path('/images'), $filename);
-                $filenameArray[] = "images/$filename"; // Store full path
+                $filenameArray[] = "images\\$filename"; // Store full path
             }
             $coverImage = implode(',', $filenameArray); // Store comma-separated paths
         } else {
             // If coverImage is a single file
             $filename = time() . '_' . $coverImage->getClientOriginalName();
             $coverImage->move(public_path('/images'), $filename);
-            $coverImage = "images/$filename"; // Store full path
+            $coverImage = "images\\$filename"; // Store full path
         }
 
         // Process other images
@@ -48,10 +49,9 @@ class UserController extends Controller
             foreach ($request->file('otherImages') as $image) {
                 $filename = time() . '_' . $image->getClientOriginalName();
                 $image->move(public_path('/images'), $filename);
-                $otherImages[] = "images/$filename"; // Store full path
+                $otherImages[] = "images\\$filename"; // Store full path
             }
         }
-
         // Create project
         $project = Projects::create([
             'project_title' => $request->projectTitle,
@@ -66,31 +66,42 @@ class UserController extends Controller
             'creator_id' => $request->user
         ]);
 
-        foreach ($request->rewards as $index => $rewardData) {
-            $reward = Rewards::create([
-                'title' => $rewardData['title'],
-                'description' => $rewardData['description'],
-                'amount' => is_numeric((float)$rewardData['amount']) ? $rewardData['amount'] : null,
-                'estimated_delivery' => $rewardData['delivery'],
-                'projectID' => $project->projectID,
-                'reward_image' => '' // Default value for reward_image
+        foreach ($otherImages as $imagePath) {
+            Images::create([
+                'image' => $imagePath,
+                'image_id' => $project->projectID, // Use the retrieved project ID
+                'image_type' => 'App\Projects'
             ]);
+        }
 
-            // Process reward images
-            if ($request->hasFile("rewards.$index.images")) {
-                $rewardImages = $request->file("rewards.$index.images");
-                foreach ($rewardImages as $rewardImage) {
-                    $filename = time() . '_' . $rewardImage->getClientOriginalName();
-                    $rewardImage->move(public_path('/images/rewards'), $filename);
-                    $imagePath = "images/rewards/$filename";
-                    $reward->reward_image = $imagePath; // Update reward_image for each image
-                    $reward->save();
+        if($request->rewards != null){
+
+            foreach ($request->rewards as $index => $rewardData) {
+                $reward = Rewards::create([
+                    'title' => $rewardData['title'],
+                    'description' => $rewardData['description'],
+                    'amount' => is_numeric((float)$rewardData['amount']) ? $rewardData['amount'] : null,
+                    'estimated_delivery' => $rewardData['delivery'],
+                    'projectID' => $project->projectID,
+                    'reward_image' => '' // Default value for reward_image
+                ]);
+
+                // Process reward images
+                if ($request->hasFile("rewards.$index.images")) {
+                    $rewardImages = $request->file("rewards.$index.images");
+                    foreach ($rewardImages as $rewardImage) {
+                        $filename = time() . '_' . $rewardImage->getClientOriginalName();
+                        $rewardImage->move(public_path('/images/rewards'), $filename);
+                        $imagePath = "images/rewards/$filename";
+                        $reward->reward_image = $imagePath; // Update reward_image for each image
+                        $reward->save();
+                    }
                 }
             }
         }
-
-        // Return response indicating success
-        return response()->json([
+            
+            // Return response indicating success
+            return response()->json([
             'message' => 'Project created successfully',
             'project_type' => $request->type,
         ]);
@@ -101,13 +112,9 @@ class UserController extends Controller
     public function project_edit(Request $request)
     {
         $project = Projects::where('ProjectID', $request->id)->get();
-
         $genre = Genre::where('genreID', $project[0]->genre_id)->get();
         $creator = User::where('id', $project[0]->creator_id)->get();
-        $images = Images::select(['image', 'id'])
-            ->where('image_id', $request->id)
-            ->where('image_type', 'App\Projects')
-            ->get();
+        $images = Images::where('image_id', $request->id)->get();
         $rewards = Rewards::where('projectID', $request->id)->get();
 
         $project[0]->genre = $genre[0]->name;
@@ -211,5 +218,39 @@ class UserController extends Controller
         } else {
             return response()->json(['message' => 'Image not found'], 404);
         }
+    }
+
+    public function add_project_reward(Request $request)
+    {
+        // Create a new reward instance
+        $reward = Rewards::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'estimated_delivery' => $request->estimated_delivery,
+            'projectID' => $request->projectID,
+            'reward_image' => ''
+        ]);
+
+        // Process reward images if provided
+        if ($request->hasFile("reward_image")) {
+            $rewardImage = $request->file("reward_image");
+            // Generate a unique filename for the image
+            $filename = time() . '_' . $rewardImage->getClientOriginalName();
+            // Move the image to the desired location
+            $rewardImage->move(public_path('/images/rewards'), $filename);
+            // Update reward_image for each image
+            $imagePath = "images/rewards/$filename";
+            $reward->reward_image = $imagePath;
+            $reward->save();
+        }
+        return response()->json(['reward' => $reward], 200);
+    }
+
+    public function delete_project_reward(Request $request){
+       
+        $reward = Rewards::find($request->rewardID);
+        $reward->delete();
+        return response()->json(['message' => 'Reward deleted successfully'], 200);
     }
 }

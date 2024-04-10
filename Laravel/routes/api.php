@@ -59,4 +59,7 @@ Route::group(['middleware' => ['auth:api', 'user']], function () {
     Route::put('user/project/{id}/details', [UserController::class, 'updateProjectDetails']);
     Route::put('user/project/{id}/images', [UserController::class, 'updateProjectImages']);
     Route::delete('user/project/{id}/image/{imageid}', [UserController::class, 'deleteProjectImages']);
+
+    Route::post('/user/project/{id}/reward/add', [UserController::class, 'add_project_reward']);
+    Route::delete('/user/project/{id}/reward/delete', [UserController::class, 'delete_project_reward']);
 });
