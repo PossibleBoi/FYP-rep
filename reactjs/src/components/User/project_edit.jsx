@@ -180,7 +180,7 @@ export default function Project_Edit_View() {
         formData.append('estimated_delivery', newRewardDeliveryDate);
         formData.append('projectID', project_id);
         formData.append('reward_image', newRewardImage);
-        
+
         // Make an API call to add the new reward
         httpForm.post(`/user/project/${project_id}/reward/add`, formData)
             .then((response) => {
@@ -279,32 +279,33 @@ export default function Project_Edit_View() {
                 </div>
 
                 {/* Rewards modification section */}
-                <div className="mb-4">
-                    {/* Existing rewards list */}
-                    <h2 className="text-xl font-bold mb-2"> Rewards</h2>
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                        {rewards.map((reward, index) => (
-                            <div key={index} className="relative">
-                                <div className="p-4 border rounded">
-                                    <h3 className="text-lg font-semibold mb-2">{reward.title}</h3>
-                                    <img src={`http://localhost:8000/${reward.reward_image}`} alt="Reward Image" className="object-cover w-full h-24 rounded mb-2" />
-                                    <p>{reward.description}</p>
-                                    <p>Minimum Amount: {reward.amount}</p>
-                                    <p>Estimated Delivery: {reward.estimated_delivery}</p>
+                {project.type === 'Invest' && (
+                    <div className="mb-4">
+                        {/* Existing rewards list */}
+                        <h2 className="text-xl font-bold mb-2"> Rewards:</h2>
+                        <div className="grid grid-cols-3 gap-4 mb-4">
+                            {rewards.map((reward, index) => (
+                                <div key={index} className="relative">
+                                    <div className="p-4 border rounded">
+                                        <h3 className="text-lg font-semibold mb-2">{reward.title}</h3>
+                                        <img src={`http://localhost:8000/${reward.reward_image}`} alt="Reward Image" className="object-cover w-full h-24 rounded mb-2" />
+                                        <p>{reward.description}</p>
+                                        <p>Minimum Amount: {reward.amount}</p>
+                                        <p>Estimated Delivery: {reward.estimated_delivery}</p>
+                                    </div>
+                                    <button onClick={() => handleDeleteReward(index, reward.rewardID)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded-full">X</button>
                                 </div>
-                                <button onClick={() => handleDeleteReward(index, reward.rewardID)} className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded-full">X</button>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
 
-                    {project.type === 'Invest' && (
+
                         <div className="flex justify-center">
                             <button onClick={handleAddReward} className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                                 Add Reward
                             </button>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
 
             {/* Add Reward Modal */}

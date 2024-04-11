@@ -5,6 +5,7 @@ import UserCRUD from "../Admin/userCRUD";
 import AdminDashboard from '../Dashboard/admin_dashboard';
 import ProjectCRUD from '../Admin/projectCRUD';
 import UserEDIT from '../Admin/userEDIT';
+import ProjectView from '../Admin/project_view';
 
 export default function AdminNav() {
     const { token, logout, user } = AuthUser();
@@ -37,6 +38,7 @@ export default function AdminNav() {
                     <Route path="/admin/users" element={<UserCRUD />} />
                     <Route path="/admin/projects" element={<ProjectCRUD />} />
                     <Route path={`/admin/users/edit/:id`} element={<UserEDIT />} />
+                    <Route path={`/admin/project/:id`} element={<ProjectView />} /> 
                 </Routes>
             </div>
         </div>

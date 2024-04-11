@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genre;
+use App\Models\Projects;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\User;
 
@@ -48,7 +49,6 @@ class AdminController extends Controller
         ]);
     }
 
-
     public function add_project_genre()
     {
         $genre = request('genre');
@@ -66,6 +66,27 @@ class AdminController extends Controller
         $genre = Genre::all();
         return response()->json([
             $genre
+        ]);
+    }
+
+    public function remove_project_genre($id)
+    {
+        $genre = Genre::find($id);
+        $genre->delete();
+        return response()->json([
+            'message' => 'Genre removed successfully'
+        ]);
+    }
+
+    public function update_project(Request $request, $id)
+    {
+        $project = Projects::find($id);
+        $project->genre_id = $request->genre;
+        $project->status = $request->projectStatus;
+        $project->type = $request->projectType;
+        $project->save();
+        return response()->json([
+            'message' => 'Project updated successfully'
         ]);
     }
 }

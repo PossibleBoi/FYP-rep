@@ -21,7 +21,7 @@ export default function ProjectCRUD() {
     const AddGenre = (e) => {
         e.preventDefault();
 
-        http.post('/admin/projects/genre/add', { genre: genre })
+        http.post('/projects/genre/add', { genre: genre })
             .then((response) => {
                 console.log(response);
                 handleCloseDialog();
@@ -45,11 +45,14 @@ export default function ProjectCRUD() {
         http.delete(`/projects/genre/remove/${id}`)
             .then((response) => {
                 console.log('Genre removed successfully');
-                setGenreList(genreList.filter(genre => genre.id !== id));
             })
             .catch(error => {
                 console.error('Error removing genre:', error);
             });
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500);
     };
 
     const fetchProjects = () => {
@@ -61,8 +64,6 @@ export default function ProjectCRUD() {
                 console.error('Error fetching projects:', error);
             });
     };
-
-    
 
     useEffect(() => {
         GetGenre();
@@ -94,7 +95,7 @@ export default function ProjectCRUD() {
                 <h2 className="text-2xl font-bold mb-4">Project Genres</h2>
                 <div className="flex flex-wrap gap-4">
                     {genreList.map((genre) => (
-                        <div key={genre.id} className="bg-gray-100 p-2 rounded-md">{genre.name} <button onClick={() => RemoveGenre(genre.id)} className="ml-2 text-red-500 hover:text-red-700">Remove</button></div>
+                        <div key={genre.id} className="bg-gray-100 p-2 rounded-md">{genre.name} <button onClick={() => RemoveGenre(genre.genreID)} className="ml-2 text-red-500 hover:text-red-700">Remove</button></div>
                     ))}
                 </div>
                 <button onClick={enableGenreDialog} className="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500">Add Genre</button>
@@ -109,7 +110,7 @@ export default function ProjectCRUD() {
                         <div className="p-4">
                             <h3 className="text-lg font-bold mb-2">{project.project_title}</h3>
                             <p className="text-gray-700">{project.short_description}</p>
-                            <Link to={`/projects/${project.projectID}`} className="block mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500">View Project</Link>
+                            <Link to={`/admin/project/${project.projectID}`} className="block mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500">View Project</Link>
                         </div>
                     </div>
                 ))}

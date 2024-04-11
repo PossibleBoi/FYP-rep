@@ -33,12 +33,10 @@ class ProjectController extends Controller
 
     public function project(Request $request)
     {
-        $project = Projects::where('ProjectID', $request->id)->get();
+         $project = Projects::where('ProjectID', $request->id)->get();
         $genre = Genre::where('genreID', $project[0]->genre_id)->get();
         $creator = User::where('id', $project[0]->creator_id)->get();
-        $images = Images::where('image_id', $request->id)
-            ->where('image_type', 'App\Projects')
-            ->get();
+        $images = Images::where('image_id', $request->id)->get();
         $rewards = Rewards::where('projectID', $request->id)->get();
 
         $project[0]->genre = $genre[0]->name;
@@ -46,7 +44,7 @@ class ProjectController extends Controller
         $project[0]->creator_email = $creator[0]->email;
         $project[0]->images = $images;
         $project[0]->rewards = $rewards;
-        
+
         return response()->json([
             'project' => $project,
         ]);
