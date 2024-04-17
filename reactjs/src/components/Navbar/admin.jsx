@@ -23,14 +23,13 @@ export default function AdminNav() {
             {/* Sidebar */}
             <div className="p-2 bg-gray-800 text-white">
                 <div className="my-6">
-                    <h1 className="px-4 text-3xl font-bold">{`Admin: ${user.name}`}</h1>
+                    <h1 className="px-4 text-3xl font-bold">{`Welcome, ${user.name}`}</h1>
                 </div>
                 <ul className="grid gap-2">
                     <NavItem to="/dashboard" icon="dashboard">Dashboard</NavItem>
                     <NavItem to="/admin/users" icon="users">Users</NavItem>
                     <NavItem to="/admin/projects" icon="projects">Projects</NavItem>
-                    <NavItem to="#" icon="notifications">Notifications</NavItem>
-                    <NavItem to="#" icon="profile">Profile</NavItem>
+                    <NavItem to="https://test-admin.khalti.com/#/transaction?search_type&search_value&state=DhvMj9hdRufLqkP8ZY4d8g&type&start_date=2024-04-14&end_date=2024-04-17&live=true&page=1" icon="notifications">Transactions</NavItem>
                     <NavItem onClick={logoutUser} icon="logout">Logout</NavItem>
                 </ul>
             </div>
@@ -41,9 +40,9 @@ export default function AdminNav() {
                     <Route path="/admin/users" element={<UserCRUD />} />
                     <Route path="/admin/projects" element={<ProjectCRUD />} />
                     <Route path={`/admin/users/edit/:id`} element={<UserEDIT />} />
-                    <Route path={`/admin/project/:id`} element={<ProjectView />} /> 
+                    <Route path={`/admin/project/:id`} element={<ProjectView />} />
                 </Routes>
-            </div>
+            </div>Z
         </div>
     );
 }

@@ -21,7 +21,7 @@ export default function ProjectView() {
                 console.log(error);
             })
 
-        http.get(`/user/project/${project_id}`)
+        http.get(`/project/${project_id}`)
             .then((response) => {
                 setProject(response.data.project[0]);
                 setGenre(response.data.project[0].genre_id); // Set initial genre value
@@ -81,7 +81,10 @@ export default function ProjectView() {
                 <div>
                     <div>
                         <h1 className="text-3xl font-bold mb-4 text-center text-black-600">{project.project_title}</h1>
-                        <h5 className="text-lg font-semibold mb-4 text-center text-yellow-600">{project.short_description}</h5>
+                        <h1 className="text-3xl font-bold mb-4 text-center text-black-600">Funding Goal: Rs. {project.funding_goal}</h1>
+                        <h1 className="text-3xl font-bold mb-4 text-center text-black-600">Funding Raised: Rs. {project.total_amount_raised}</h1>
+                        <h5 className="text-lg font-semibold mb-4 text-center text-yellow-600">Short Description: {project.short_description} </h5>
+                        <h5 className="text-lg font-semibold mb-4 text-center text-yellow-600"></h5>
                         <h5 className="text-lg font-semibold mb-4 text-center text-yellow-600">Project Deadline: {project.end_date}</h5>
                         <h5 className="text-lg font-semibold mb-4 text-center text-yellow-600">Cover Image:</h5>
                         <img src={`http://localhost:8000/${project.cover_image}`} alt="Cover Image" className="object-cover w-full h-40 rounded" />

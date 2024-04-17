@@ -108,9 +108,13 @@ export default function Project_Edit_View() {
         http.post('/user/project/updates', { project_id, newUpdates })
             .then((response) => {
                 setShowUpdateModal(false);
+                toast.success('Update created successfully');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3500);
             })
             .catch((error) => {
-                console.error('Error creating new update:', error);
+                toast.error('Error creating new update. Please try again later.');
             });
     }
 

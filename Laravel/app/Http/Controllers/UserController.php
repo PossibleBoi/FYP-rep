@@ -162,16 +162,14 @@ class UserController extends Controller
         $images = Images::where('image_id', $request->id)->get();
         $rewards = Rewards::where('projectID', $request->id)->get();
         $transaction = Transactions::where('projectID', $request->id)->get();
+        $backers = User::where('id', $transaction[0]->backerID)->get();
 
-        // Only fetch transactions and backers if the project type is 'Invest'
-        if ($project[0]->type === 'Invest') {
-            $backers = User::where('id', $transaction[0]->backerID)->get();
-            $project[0]->backers = $backers;
-        }
         $totalAmount = $transaction->reduce(function ($carry, $transaction) {
             return $carry + floatval($transaction->amount);
         }, 0);
-
+        
+        
+        $project[0]->backers = $backers;
         $project[0]->total_transactions = count($transaction);
         $project[0]->total_amount_raised = $totalAmount;
         $project[0]->genre = $genre[0]->name;

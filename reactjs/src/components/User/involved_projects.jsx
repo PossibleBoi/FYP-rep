@@ -34,7 +34,7 @@ export default function InvolvedProjects() {
                                 </div>
                                 {project.rewards && project.rewards.length > 0 && (
                                     <div className="p-5 border-t border-gray-200 dark:border-gray-700">
-                                        <h6 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">Rewards To Recieve</h6>
+                                        <h6 className="mb-2 text-lg font-bold text-gray-900 dark:text-white">Rewards To Receive</h6>
                                         <ul>
                                             {project.rewards.map((reward, index) => (
                                                 <li key={index} className="flex items-center mb-2 text-sm text-gray-700 dark:text-gray-400">
@@ -51,6 +51,7 @@ export default function InvolvedProjects() {
                     ) : (
                         <div className="text-gray-700">No projects available</div>
                     )}
+
                 </div>
             </div>
         </div>

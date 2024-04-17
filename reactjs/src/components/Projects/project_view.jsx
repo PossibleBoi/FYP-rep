@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AuthUser from '../Authentication/AuthUser';
+import { useNavigate } from 'react-router-dom'; // Import useHistory hook
 
 export default function Project_View() {
     const { user, http, khalti } = AuthUser();
@@ -12,7 +13,7 @@ export default function Project_View() {
     const [reportModal, setReportModal] = useState(false);
     const [report, setReport] = useState('');
     const [updates, setUpdates] = useState([]);
-
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
     useEffect(() => {
         http.get(`/project/${project_id}`).then((response) => {
@@ -36,22 +37,32 @@ export default function Project_View() {
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex - 1 + project.images.length) % project.images.length);
     };
+    const redirectToLogin = () => {
+        navigate('/login'); // Redirect to login page
+    };
 
     const InitiatePaymentCrowdfund = () => {
+        if (!user) {
+            redirectToLogin(); // Redirect if user is not logged in
+            return;
+        }
         setShowModalDonate(true);
     }
 
     const InitiatePaymentInvest = () => {
+        if (!user) {
+            redirectToLogin(); // Redirect if user is not logged in
+            return;
+        }
         setShowModalInvest(true);
     }
-
     const CreateReport = () => {
         setReportModal(true)
     }
     const crowdfundPay = () => {
 
         khalti.post('epayment/initiate/', {
-            "return_url": "http://localhost:3000/payment/success/",
+            "return_url": "http://localhost:3000/payment/",
             "website_url": "http://localhost:3000/",
             "amount": amount * 100, // Use entered amount
             "purchase_order_id": 'userid_' + user.id + '_projectid_' + project.projectID,
@@ -75,7 +86,7 @@ export default function Project_View() {
 
         khalti.post('epayment/initiate/',
             {
-                "return_url": "http://localhost:3000/payment/success/",
+                "return_url": "http://localhost:3000/payment/",
                 "website_url": "http://localhost:3000/",
                 "amount": reward.amount * 100,
                 "purchase_order_id": 'userid_' + user.id + '_projectid_' + project.projectID + "_rewarded_" + rewardID,
@@ -154,30 +165,30 @@ export default function Project_View() {
                             <button onClick={CreateReport} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded absolute right-10">
                                 <span>Report</span>
                             </button>
-                             <div className="bg-yellow-50 rounded-lg p-4 mb-4">
-                <h2 className="text-lg font-semibold mb-2 text-yellow-600">Project Details</h2>
-                <div className="bg-white rounded-lg p-4 shadow-md">
-                    <div className="mb-4">
-                        <p className="font-semibold">Total Funding:</p>
-                        <p>Rs. {project.total_amount_raised}</p>
-                        {/* Progress Bar */}
-                        <div className="h-4 bg-gray-200 rounded-md mt-2">
-                            <div
-                                className="h-full bg-green-500 rounded-md"
-                                style={{ width: `${fundingPercentage}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                    <div className="mb-4">
-                        <p className="font-semibold">Total Backers:</p>
-                        <p>{project.total_transactions}</p>
-                    </div>
-                    <div className="mb-4">
-                        <p className="font-semibold">End Date:</p>
-                        <p>{project.end_date}</p>
-                    </div>
-                </div>
-            </div>
+                            <div className="bg-yellow-50 rounded-lg p-4 mb-4">
+                                <h2 className="text-lg font-semibold mb-2 text-yellow-600">Project Details</h2>
+                                <div className="bg-white rounded-lg p-4 shadow-md">
+                                    <div className="mb-4">
+                                        <p className="font-semibold">Total Funding:</p>
+                                        <p>Rs. {project.total_amount_raised} of Rs. {project.funding_goal}</p>
+                                        {/* Progress Bar */}
+                                        <div className="h-4 bg-gray-200 rounded-md mt-2">
+                                            <div
+                                                className="h-full bg-green-500 rounded-md"
+                                                style={{ width: `${fundingPercentage}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-4">
+                                        <p className="font-semibold">Total Backers:</p>
+                                        <p>{project.total_transactions}</p>
+                                    </div>
+                                    <div className="mb-4">
+                                        <p className="font-semibold">End Date:</p>
+                                        <p>{project.end_date}</p>
+                                    </div>
+                                </div>
+                            </div>
                             {/* Action Buttons */}
                             <div className="md:flex-row md:justify-between items-center">
                                 {/* Description */}

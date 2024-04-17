@@ -7,12 +7,12 @@ export default function Post_Pledge() {
   const [transactionID, setTransactionID] = useState('');
   const [amount, setTotalAmount] = useState('');
 
-  const information = window.location.href.split("/")[5].split('&');
-
-  const pidx = information[12].split('=')[1];
-  const projectID = information[10].split('=')[1].split('_')[3];
-  const userID = information[10].split('=')[1].split('_')[1];
-  const rewardID = information[10].split('=')[1].split('_')[5];
+  const urlParams = new URLSearchParams(window.location.search);
+  const pidx = urlParams.get('pidx');
+  const userID = urlParams.get('purchase_order_id').split('_')[1];
+  const projectID = urlParams.get('purchase_order_id').split('_')[3]; 
+  const rewardID = urlParams.get('purchase_order_id').split('_')[5]; 
+  
   //fix all those above to states, use the information from below post !
   useEffect(() => {
     khalti.post('/epayment/lookup/', {
