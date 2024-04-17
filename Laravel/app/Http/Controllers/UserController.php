@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Genre;
 use App\Models\Images;
-use App\Models\Projects;
 use App\Models\Rewards;
+use App\Models\Updates;
+use App\Models\Projects;
+use App\Models\Transactions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redis;
 use Termwind\Components\Raw;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -18,6 +21,48 @@ class UserController extends Controller
         $users = User::select('id', 'name', 'role', 'email', 'location', 'status')->get();
         return response()->json([
             $users
+        ]);
+    }
+
+    public function user(Request $request) //Returns a specific user's information
+    {
+        $user = User::select('id', 'name', 'role', 'email', 'location', 'status')
+            ->find($request->id);
+
+        return response()->json([
+            $user
+        ]);
+    }
+
+    public function verifyEmail($id)
+    {
+        // Logic to verify email for user with ID $id
+        $user = User::findOrFail($id);
+        $user->email_verified_at = now();
+        $user->save();
+
+        return response()->json(['message' => 'Email verified successfully']);
+    }
+
+    public function resetPassword($id)
+    {
+        // Logic to reset password for user with ID $id
+        $user = User::findOrFail($id);
+        // Reset password logic here...
+
+        return response()->json(['message' => 'Password reset successfully']);
+    }
+
+    public function update_user(Request $request) //Updates a user's information
+    {
+        $user = User::find($request->id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->location = $request->location;
+        $user->save();
+
+        return response()->json([
+            'message' => 'User updated successfully'
         ]);
     }
 
@@ -74,7 +119,7 @@ class UserController extends Controller
             ]);
         }
 
-        if($request->rewards != null){
+        if ($request->rewards != null) {
 
             foreach ($request->rewards as $index => $rewardData) {
                 $reward = Rewards::create([
@@ -99,9 +144,9 @@ class UserController extends Controller
                 }
             }
         }
-            
-            // Return response indicating success
-            return response()->json([
+
+        // Return response indicating success
+        return response()->json([
             'message' => 'Project created successfully',
             'project_type' => $request->type,
         ]);
@@ -116,7 +161,19 @@ class UserController extends Controller
         $creator = User::where('id', $project[0]->creator_id)->get();
         $images = Images::where('image_id', $request->id)->get();
         $rewards = Rewards::where('projectID', $request->id)->get();
+        $transaction = Transactions::where('projectID', $request->id)->get();
 
+        // Only fetch transactions and backers if the project type is 'Invest'
+        if ($project[0]->type === 'Invest') {
+            $backers = User::where('id', $transaction[0]->backerID)->get();
+            $project[0]->backers = $backers;
+        }
+        $totalAmount = $transaction->reduce(function ($carry, $transaction) {
+            return $carry + floatval($transaction->amount);
+        }, 0);
+
+        $project[0]->total_transactions = count($transaction);
+        $project[0]->total_amount_raised = $totalAmount;
         $project[0]->genre = $genre[0]->name;
         $project[0]->creator = $creator[0]->name;
         $project[0]->creator_email = $creator[0]->email;
@@ -247,10 +304,59 @@ class UserController extends Controller
         return response()->json(['reward' => $reward], 200);
     }
 
-    public function delete_project_reward(Request $request){
-       
+    public function delete_project_reward(Request $request)
+    {
+
         $reward = Rewards::find($request->rewardID);
         $reward->delete();
         return response()->json(['message' => 'Reward deleted successfully'], 200);
+    }
+
+    public function add_transaction(Request $request)
+    {
+        // Create a new transaction instance
+        $transaction = Transactions::create([
+            'transactionID' => $request->transaction_id,
+            'amount' => $request->amount,
+            'transactiondate' => $request->transaction_date,
+            'projectID' => $request->project_id,
+            'backerID' => $request->user_id,
+            'rewardID' => $request->reward_id,
+        ]);
+
+        return response()->json(['transaction' => $transaction], 200);
+    }
+
+    public function add_project_updates(Request $request)
+    {
+        $projectUpdate = Updates::create([
+            'projectID' => $request->project_id,
+            'content' => $request->newUpdates,
+        ]);
+
+        return response()->json(['project_update' => $projectUpdate], 200);
+    }
+
+    public function project_updates(Request $request)
+    {
+        $projectUpdates = Updates::where('projectID', $request->id)->get();
+        return response()->json(['project_updates' => $projectUpdates], 200);
+    }
+
+    public function delete_update(Request $request)
+    {
+        try {
+            $update = Updates::where('updateID', $request->updateid)->first();
+
+            if (!$update) {
+                return response()->json(['error' => 'Update not found'], 404);
+            }
+
+            $update->delete();
+
+            return response()->json(['message' => 'Update deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error deleting update'], 500);
+        }
     }
 }

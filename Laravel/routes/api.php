@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\BasicController;
 use App\Http\Controllers\ProjectController;
+use App\Models\Transactions;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,11 +39,16 @@ Route::group(['middleware' => 'api'], function () {
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('admin/users', [UserController::class, 'users']);
+    Route::get('admin/user/{id}', [UserController::class, 'user']);
+
     Route::get('admin/users/total', function () {
         return response()->json([User::count()]);
     });
     Route::get('admin/projects/total', function () {
         return response()->json([Projects::count()]);
+    });
+    Route::get('admin/transactions/total', function () {
+        return response()->json([Transactions::count()]);
     });
 
     Route::get('admin/users/edit/{id}', [AdminController::class, 'user_edit']);
@@ -53,10 +58,14 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/projects/genre/add', [AdminController::class, 'add_project_genre']);
     Route::delete('/projects/genre/remove/{id}', [AdminController::class, 'remove_project_genre']);
     Route::put('/project/{id}/update', [AdminController::class, 'update_project']);
+
+    Route::get('/reports/{id}', [ProjectController::class, 'reports']);
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('user/my_projects/{id}', [ProjectController::class, 'all_user_projects']); //get all unique user projects from this api, for all projects use the admin api route
+    Route::get('user/my_projects/{id}', [ProjectController::class, 'all_user_projects']);
+    Route::get('user/involved_projects/{id}', [ProjectController::class, 'involved_project']);
+
     Route::post('user/projects/create', [UserController::class, 'add_project']);
     Route::get('user/project/{id}', [UserController::class, 'project_edit']);
     Route::put('user/project/{id}/details', [UserController::class, 'updateProjectDetails']);
@@ -65,4 +74,19 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('/user/project/{id}/reward/add', [UserController::class, 'add_project_reward']);
     Route::delete('/user/project/{id}/reward/delete', [UserController::class, 'delete_project_reward']);
+
+    Route::post('user/project/updates', [UserController::class, 'add_project_updates']);
+    Route::get('user/project/{id}/updates', [UserController::class, 'project_updates']);
+    Route::delete('user/project/{id}/update/{updateid}', [UserController::class, 'delete_update']);
+
+    Route::get('/user/{id}', [UserController::class, 'user']);
+    Route::put('/user/{id}/update', [UserController::class, 'update_user']);
+    Route::post('/user/reset-password/{id}',[UserController::class, 'resetPassword']);
+    Route::post('/user/verify-email/{id}', [UserController::class, 'verifyEmail']);
+
+    Route::post('/transaction/add', [UserController::class, 'add_transaction']);
+
+    Route::post('/report/add', [ProjectController::class, 'add_report']);
+
+
 });

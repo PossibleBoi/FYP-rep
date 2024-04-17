@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, Link, useNavigate } from 'react-router-dom';
 import AuthUser from '../Authentication/AuthUser';
 import UserCRUD from "../Admin/userCRUD";
 import AdminDashboard from '../Dashboard/admin_dashboard';
@@ -9,11 +9,14 @@ import ProjectView from '../Admin/project_view';
 
 export default function AdminNav() {
     const { token, logout, user } = AuthUser();
+    const navigate = useNavigate();
+
     const logoutUser = () => {
         if (token != undefined) {
             logout();
         }
-    };
+        navigate("/login");
+    }
 
     return (
         <div className="flex h-screen">

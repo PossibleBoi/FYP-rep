@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
 import AuthUser from "../Authentication/AuthUser";
 import AdminDashboard from "./admin_dashboard";
-import UserDashboard from "./user_dashboard";
+import Home from "../Authentication/home";
 
 export default function Dashboard() {
     const { user } = AuthUser();
@@ -11,7 +10,7 @@ export default function Dashboard() {
         return <AdminDashboard />
         }
     else if (user.role == "user"){
-        return <UserDashboard />
+        return <Home />
             }
     else {
         return (

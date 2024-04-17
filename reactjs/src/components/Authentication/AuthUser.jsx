@@ -1,4 +1,4 @@
-import axios, { all } from 'axios';
+import  axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Cookies from 'js-cookies';
@@ -27,14 +27,20 @@ export default function AuthUser() {
         Cookies.setItem("user", JSON.stringify(user), { SameSite: 'None' });
         setUser(user);
         setToken(token);
-        navigate("/dashboard");
+        if (user.role === "admin") {
+            navigate("/dashboard");
+        }
+        else {
+            navigate("/");
+        }
     }
 
     const logout = () => {
-        Cookies.removeItem('user', { SameSite: 'None' });  
+        Cookies.removeItem('user', { SameSite: 'None' });
         Cookies.removeItem('token', { SameSite: 'None' });
-        navigate("/");
+        navigate("/login");
     }
+
 
     const http = axios.create({
         baseURL: "http://127.0.0.1:8000/api",
@@ -44,16 +50,24 @@ export default function AuthUser() {
             "Access-Control-Allow-Origin": "*",
         }
     })
-    
+
     const httpForm = axios.create({
-            baseURL: "http://127.0.0.1:8000/api",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-type": "multipart/form-data",
-                "Access-Control-Allow-Origin": "*",
-            }
-        })
-    
+        baseURL: "http://127.0.0.1:8000/api",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
+        }
+    })
+
+    const khalti = axios.create({
+        baseURL: "https://a.khalti.com/api/v2/",
+        headers: {
+            "Authorization": "key ef22c99f8697486d828f8dc3ea981fe6",
+            "Content-type": "application/json",
+        }
+    })
+
     return {
         setToken: saveToken,
         token,
@@ -61,6 +75,7 @@ export default function AuthUser() {
         getToken,
         http,
         httpForm,
+        khalti,
         logout,
     }
 }   

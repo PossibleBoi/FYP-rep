@@ -1,45 +1,35 @@
 import React from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
-import Home from '../Authentication/home';
+import { Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from '../Authentication/login';
 import Register from '../Authentication/register';
+import Home from '../Authentication/home';
 import Project_View from '../Projects/project_view';
 
 export default function GuestNav() {
   return (
     <div className="App">
       <nav className="bg-yellow-500 shadow-lg">
-        <div className="max-w-screen-xl mx-auto px-4">
-          <div className="flex justify-between items-center py-4">
-            <Link to="/" className="flex items-center space-x-3">
-              <img src={require('./logo.png')} className="h-8" alt="DIYO Logo" />
-              <span className="text-white text-2xl font-semibold">DIYO</span>
+        <div className="flex justify-between items-center py-3">
+          <div>
+            <Link to="/">
+              <img src={require('./logo.png')} className="w-20 h-auto absolute mb-0 -mt-10" alt="DIYO Logo" />
             </Link>
-            <button className="md:hidden focus:outline-none focus:bg-gray-600 rounded-lg p-2 text-gray-400 hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </button>
-            <ul className="hidden md:flex items-center space-x-8">
-              <li>
-                <Link to="/" className="text-white hover:text-gray-300">Home</Link>
-              </li>
-              <li>
-                <Link to="/login" className="text-white hover:text-gray-300">Login</Link>
-              </li>
-              <li>
-                <Link to="/register" className="text-white hover:text-gray-300">Register</Link>
-              </li>
-            </ul>
           </div>
+          <Link to="/" class="text-3xl text-white">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;DIYO</Link>
+          <ul className="hidden md:flex items-center space-x-8">
+            <li>
+              <Link to="/login" className="text-white text-1xl hover:text-gray-300 mx-2">Login</Link>
+            </li>
+          </ul>
         </div>
       </nav>
       <div className="container mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path={`/project/:id`} element={<Project_View />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path={`/project/:id`} element={<Project_View />} />
         </Routes>
       </div>
     </div>

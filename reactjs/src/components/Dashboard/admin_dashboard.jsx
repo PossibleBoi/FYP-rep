@@ -6,6 +6,8 @@ export default function YourComponent() {
 
     const [userTotal, setUserTotal] = useState(0);
     const [projectTotal, setProjectTotal] = useState(0);
+    const [transactionTotal, setTransactionTotal] = useState(0);
+
 
     useEffect(() => {
         // Fetch total number of users
@@ -21,6 +23,14 @@ export default function YourComponent() {
         http.get('/admin/projects/total')
             .then((response) => {
                 setProjectTotal(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching total projects:', error);
+            });
+
+            http.get('/admin/transactions/total')
+            .then((response) => {
+                setTransactionTotal(response.data);
             })
             .catch((error) => {
                 console.error('Error fetching total projects:', error);
@@ -44,7 +54,7 @@ export default function YourComponent() {
             <div className="bg-white p-6 rounded-md shadow-md">
                 <p className="text-lg font-semibold mb-2">Total Users: {userTotal}</p>
                 <p className="text-lg font-semibold mb-2">Total Projects: {projectTotal}</p>
-                <p className="text-lg font-semibold mb-2">Total Transactions: </p>
+                <p className="text-lg font-semibold mb-2">Total Transactions: {transactionTotal}</p>
             </div>
             {renderGraphs()}
         </div>

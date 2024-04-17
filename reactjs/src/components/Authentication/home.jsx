@@ -16,73 +16,83 @@ export default function Home() {
             });
     }, []);
 
-    // Shuffle the projects array
     const shuffledProjects = projects.sort(() => Math.random() - 0.5);
 
-    // Select the first project as the featured project
     const featuredProject = shuffledProjects.length > 0 ? shuffledProjects[0] : null;
 
-    // Select four random projects for the right column
     const randomProjects = shuffledProjects.slice(1, 5);
 
     return (
         <div className="bg-gray-100 min-h-screen">
-            <div className="container mx-auto py-8">
-                <div className="grid gap-8">
-                    <div className="col-span-2 bg-white p-8 rounded-lg shadow-md mb-8">
-                        <h2 className="text-2xl font-bold mb-4">Welcome to Our Platform</h2>
-                        <p className="text-gray-700">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eu justo nec risus facilisis vehicula.
-                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                            Sed ut leo vel est congue fermentum.
-                        </p>
-                        {user == undefined ? (
-                            <Link to="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4 inline-block">
-                                Create Project
-                            </Link>
-                        ) : (
-                            <Link to="/create_project" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4 inline-block">
-                                Create Project
-                            </Link>
-                        )}
-                    </div>
+            <div className="container relative">
+                <div className="relative">
+                    {/* Image */}
+                    <img src={require('./nepal.jpg')} alt="Background" className="w-full h-auto" style={{ maxHeight: "85vh" }} />
+                    {/* Slogan */}
+                    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-3xl font-semibold opacity-70">
+                        Diyo: Illuminate Dreams, Illuminate Lives
+                    </span>
+
+                    {/* Button */}
+                    <Link
+                        to={user === undefined ? "/login" : "/create_project"}
+                        className="bg-yellow-50 hover:bg-yellow-300 text-gray-600 font-bold py-3 px-6 rounded-lg transition duration-300 absolute bottom-14 left-1/2 transform -translate-x-1/2 opacity-70"
+                    >
+                        Create Project
+                    </Link>
                 </div>
-                <div className="grid grid-cols-3 gap-8">
+
+            </div>
+            <div className="bg-yellow-50 container mt-6 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column: Featured Project */}
-                    <div className="col-span-2 bg-white p-8 rounded-lg shadow-md mb-8">
-                        <h2 className="text-2xl font-bold mb-4">Featured Project</h2>
+                    <div className="col-span-2 relative">
+                        <h2 className="absolute transform text-gray-700 text-3xl font-semibold opacity-70 ml-1">Featured Project</h2>
                         {featuredProject && (
-                            <div className="bg-white border border-gray-200 rounded-lg shadow-md aspect-w-1 aspect-h-1 mb-4">
+                            <div className="rounded-lg shadow-md overflow-hidden w-full h-96"> {/* Adjusted height */}
                                 <Link to={`/project/${featuredProject.projectID}`} className="block">
-                                    <img className="object-cover rounded-t-lg" src={`http://localhost:8000/${featuredProject.cover_image}`} alt="Project Cover" />
+                                    <img className="w-full h-full object-cover" src={`http://localhost:8000/${featuredProject.cover_image}`} alt="Project Cover" />
                                     <div className="p-4">
-                                        <h3 className="text-lg font-semibold mb-2">{featuredProject.project_title}</h3>
+                                        <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold mb-2">{featuredProject.project_title}</h3>
                                         <p className="text-gray-700">{featuredProject.short_description}</p>
                                     </div>
                                 </Link>
                             </div>
                         )}
                     </div>
-
                     {/* Right Column: Random Projects */}
                     <div className="col-span-1">
                         <div className="grid grid-cols-2 gap-4">
                             {/* Random Projects loop */}
                             {randomProjects.map((project) => (
-                                <div key={project.projectID} className="bg-white border border-gray-200 rounded-lg shadow-md">
+                                <div key={project.projectID} className="rounded-lg shadow-md overflow-hidden bg-white w-full h-96"> {/* Adjusted height */}
                                     <Link to={`/project/${project.projectID}`} className="block">
-                                        <img className="object-cover h-48 w-full rounded-t-lg" src={`http://localhost:8000/${project.cover_image}`} alt="Project Cover" />
-                                        <div className="p-4">
-                                            <h3 className="text-lg font-semibold mb-2">{project.project_title}</h3>
-                                            <p className="text-gray-700">{project.short_description}</p>
-                                        </div>
+                                        <img className="w-full h-3/6" src={`http://localhost:8000/${project.cover_image}`} alt="Project Cover" />
                                     </Link>
+                                    <div className="p-2">
+                                        <div className="flex justify-between">
+                                            <h5 className="mb-2 text-sm font-bold leading-tight text-neutral-800 dark:text-neutral-50">
+                                                {project.project_title}
+                                            </h5>
+                                        </div>
+                                        <p className="mb-1 text-sm text-neutral-600 dark:text-neutral-200">
+                                            {project.short_description}
+                                        </p>
+                                        <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+                                            Ending On : {project.end_date.split('T')[0]}
+                                        </p>
+                                        <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+                                            Goal: Rs. {project.funding_goal}
+                                        </p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
+
             </div>
+
         </div>
     );
 }
