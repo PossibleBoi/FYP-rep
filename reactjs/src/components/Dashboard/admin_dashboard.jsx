@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AuthUser from '../Authentication/AuthUser';
+import Chart from 'chart.js/auto';
 
 export default function YourComponent() {
     const { http } = AuthUser();

@@ -13,6 +13,7 @@ export default function Post_Pledge() {
   const projectID = urlParams.get('purchase_order_id').split('_')[3]; 
   const rewardID = urlParams.get('purchase_order_id').split('_')[5]; 
   
+  console.log(urlParams)
   //fix all those above to states, use the information from below post !
   useEffect(() => {
     khalti.post('/epayment/lookup/', {
