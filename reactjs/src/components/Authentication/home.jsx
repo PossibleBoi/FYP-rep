@@ -17,9 +17,7 @@ export default function Home() {
     }, []);
 
     const shuffledProjects = projects.sort(() => Math.random() - 0.5);
-
     const featuredProject = shuffledProjects.length > 0 ? shuffledProjects[0] : null;
-
     const randomProjects = shuffledProjects.slice(1, 5);
 
     return (
@@ -41,8 +39,9 @@ export default function Home() {
                         Create Project
                     </Link>
                 </div>
-
             </div>
+
+            {/* Featured Project */}
             <div className="bg-yellow-50 container mt-6 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column: Featured Project */}
@@ -59,7 +58,16 @@ export default function Home() {
                                 </Link>
                             </div>
                         )}
+
+                        {/* Explore All Projects Button */}
+                        <Link
+                            to="/projects/all"
+                            className="block mt-40 bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded focus:outline-none focus:ring focus:ring-blue-500"
+                        >
+                            Explore all our projects
+                        </Link>
                     </div>
+
                     {/* Right Column: Random Projects */}
                     <div className="col-span-1">
                         <div className="grid grid-cols-2 gap-4">
@@ -90,9 +98,7 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 }

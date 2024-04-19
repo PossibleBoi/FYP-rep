@@ -10,6 +10,7 @@ import Payment_Handling from '../Projects/payment_handling';
 import InvolvedProjects from '../User/involved_projects';
 import Profile from '../User/user_profile';
 import AboutUs from '../Projects/about_us';
+import ProjectsAll from '../Projects/projects_all';
 
 export default function UserNav() {
     const { user, token, logout } = AuthUser();
@@ -37,7 +38,7 @@ export default function UserNav() {
                             <img src={require('./logo.png')} className="w-20 h-auto absolute mb-0 -mt-10" alt="DIYO Logo" />
                         </Link>
                     </div>
-                    <Link to="/" className="text-3xl text-white block ml-32">DIYO</Link>
+                    <Link to="/" className="text-3xl text-white block ml-8">DIYO</Link>
                     <div className="hidden md:flex items-center space-x-8">
                         {/* Dropdown menu */}
                         <div className="relative group mx-4">
@@ -88,6 +89,7 @@ export default function UserNav() {
                     <Route path="/profile/:id" element={<Profile />} />
                     <Route path="/create_project" element={<Project_Creation />} />
                     <Route path="/:user/my_projects" element={<User_Projects />} />
+                    <Route path='/projects/all' element={<ProjectsAll />} />
                     <Route path="/:user/involved_projects" element={<InvolvedProjects />} />
                     <Route path={`/project/:id`} element={<Project_View />} />
                     <Route path="/project/:project_id/edit" element={<Project_Edit />} />

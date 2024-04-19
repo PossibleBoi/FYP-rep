@@ -6,6 +6,7 @@ import Register from '../Authentication/register';
 import Home from '../Authentication/home';
 import Project_View from '../Projects/project_view';
 import AboutUs from '../Projects/about_us';
+import ProjectsAll from '../Projects/projects_all';
 
 export default function GuestNav() {
   return (
@@ -29,6 +30,7 @@ export default function GuestNav() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path={`/project/:id`} element={<Project_View />} />
+          <Route path='/projects/all' element={<ProjectsAll />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path='/about_us' element={<AboutUs />} />

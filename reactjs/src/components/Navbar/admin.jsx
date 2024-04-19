@@ -19,7 +19,7 @@ export default function AdminNav() {
     }
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-full">
             {/* Sidebar */}
             <div className="p-2 bg-gray-800 text-white">
                 <div className="my-6">
@@ -42,7 +42,7 @@ export default function AdminNav() {
                     <Route path={`/admin/users/edit/:id`} element={<UserEDIT />} />
                     <Route path={`/admin/project/:id`} element={<ProjectView />} />
                 </Routes>
-            </div>Z
+            </div>
         </div>
     );
 }

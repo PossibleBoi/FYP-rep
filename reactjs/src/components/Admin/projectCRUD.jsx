@@ -9,6 +9,7 @@ export default function ProjectCRUD() {
     const [showGenreDialog, setShowGenreDialog] = useState(false);
     const [genreList, setGenreList] = useState([]);
     const [projects, setProjects] = useState([]);
+    const [projectTypeFilter, setProjectTypeFilter] = useState('');
 
     const enableGenreDialog = () => {
         setShowGenreDialog(true);
@@ -56,7 +57,11 @@ export default function ProjectCRUD() {
     };
 
     const fetchProjects = () => {
-        http.get('/home')
+        let url = '/home';
+        if (projectTypeFilter) {
+            url += `?type=${projectTypeFilter}`;
+        }
+        http.get(url)
             .then((response) => {
                 setProjects(response.data.projects);
             })
@@ -68,7 +73,11 @@ export default function ProjectCRUD() {
     useEffect(() => {
         GetGenre();
         fetchProjects();
-    }, []);
+    }, [projectTypeFilter, projects]); // Added 'projects' to the dependency array
+
+    const filteredProjects = projectTypeFilter
+        ? projects.filter(project => project.type === projectTypeFilter)
+        : projects;
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -102,19 +111,40 @@ export default function ProjectCRUD() {
             </div>
 
             {/* Project List */}
-            <h2 className="text-2xl font-bold mb-4">Projects</h2>
-            <div className="grid grid-cols-3 gap-4">
-                {projects.map((project) => (
-                    <div key={project.projectID} className="bg-white rounded-md shadow-md p-4">
-                        <img src={`http://localhost:8000/${project.cover_image}`} alt="Project Cover" className="w-full h-40 object-cover rounded-t-md" />
-                        <div className="p-4">
-                            <h3 className="text-lg font-bold mb-2">{project.project_title}</h3>
-                            <p className="text-gray-700">{project.short_description}</p>
-                            <Link to={`/admin/project/${project.projectID}`} className="block mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500">View Project</Link>
-                        </div>
-                    </div>
-                ))}
+            <div className="mb-4">
+                <label htmlFor="projectType" className="block text-sm font-medium text-gray-700">
+                    Filter by Project Type:
+                </label>
+                <select
+                    id="projectType"
+                    name="projectType"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={projectTypeFilter}
+                    onChange={(e) => setProjectTypeFilter(e.target.value)}
+                >
+                    <option value="">All</option>
+                    <option value="Crowdfund">Crowdfund</option>
+                    <option value="Invest">Invest</option>
+                </select>
             </div>
+
+            <h2 className="text-2xl font-bold mb-4">Projects</h2>
+            {filteredProjects.length > 0 ? ( // Added a conditional check for empty projects
+                <div className="grid grid-cols-3 gap-4">
+                    {filteredProjects.map((project) => (
+                        <div key={project.projectID} className="bg-white rounded-md shadow-md p-4">
+                            <img src={`http://localhost:8000/${project.cover_image}`} alt="Project Cover" className="w-full h-40 object-cover rounded-t-md" />
+                            <div className="p-4">
+                                <h3 className="text-lg font-bold mb-2">{project.project_title}</h3>
+                                <p className="text-gray-700">{project.short_description}</p>
+                                <Link to={`/admin/project/${project.projectID}`} className="block mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500">View Project</Link>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p>No projects available.</p> // Display a message when no projects are available
+            )}
         </div>
     );
 }

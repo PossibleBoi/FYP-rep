@@ -162,26 +162,32 @@ class UserController extends Controller
         $images = Images::where('image_id', $request->id)->get();
         $rewards = Rewards::where('projectID', $request->id)->get();
         $transaction = Transactions::where('projectID', $request->id)->get();
-        $backers = User::where('id', $transaction[0]->backerID)->get();
-
-        $totalAmount = $transaction->reduce(function ($carry, $transaction) {
-            return $carry + floatval($transaction->amount);
-        }, 0);
-        
-        
+        $backers = [];
+    
+        $totalAmount = 0;
+    
+        if (!$transaction->isEmpty()) {
+            $backers = User::where('id', $transaction[0]->backerID)->get();
+    
+            $totalAmount = $transaction->reduce(function ($carry, $transaction) {
+                return $carry + floatval($transaction->amount);
+            }, 0);
+        }
+    
         $project[0]->backers = $backers;
         $project[0]->total_transactions = count($transaction);
         $project[0]->total_amount_raised = $totalAmount;
-        $project[0]->genre = $genre[0]->name;
-        $project[0]->creator = $creator[0]->name;
-        $project[0]->creator_email = $creator[0]->email;
+        $project[0]->genre = $genre[0]->name ?? null;
+        $project[0]->creator = $creator[0]->name ?? null;
+        $project[0]->creator_email = $creator[0]->email ?? null;
         $project[0]->images = $images;
         $project[0]->rewards = $rewards;
-
+    
         return response()->json([
             'project' => $project,
         ]);
     }
+    
 
     public function updateProjectDetails(Request $request, $id)
     {
