@@ -126,6 +126,7 @@ export default function Project_View() {
                 <span>Report</span>
             </button>
             <h1 className="text-4xl font-bold pt-2 mb-8">{project.project_title}</h1>
+            <h4 className='text-xl font-italic p-2 mt-1'>{project.short_description}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-100">
                 {/* Image Column */}
                 <div className="relative h-96 md:h-auto md:max-w-3/4 md:col-span-1">
@@ -160,7 +161,7 @@ export default function Project_View() {
                 <div className="md:col-span-1">
                     <div className="p-4 md:p-8">
                         <div className="bg-yellow-400 opacity-90 rounded-lg p-6 h-96">
-                            <h1 className="text-4xl font-bold mb-8 text-white">
+                            <h1 className="text-4xl font-bold text-white">
                                 Rs. {project.total_amount_raised} raised of Rs. {project.funding_goal}
                             </h1>
                             <div className="bg-white rounded-lg shadow-md p-4 mt-4">
@@ -191,7 +192,7 @@ export default function Project_View() {
                                         </div>
                                     </>
                                 ) : (
-                                    <span className="text-red-500">Project is not active</span>
+                                    <span className="text-red-500">Project is not active.<br/>Status: {project.status}</span>
                                 )}
                             </div>
                         </div>
@@ -202,8 +203,8 @@ export default function Project_View() {
             <article className="grid grid-cols-1 md:grid-cols-1 gap-8 mt-12 rounded">
                 <div className="col-span-1">
                     <div className="p-4 md:p-8 rounded-lg bg-yellow-50 opacity-90 overflow-auto h-96">
-                        <h2 className="text-2xl font-bold mb-4">About Project</h2>
-                        <p className="text-lg ">{project.description}</p>
+                        <h2 className="text-4xl font-bold text-yellow-400 mb-4">About Project</h2>
+                        <p className="text-lg text-xl text-center">{project.description}</p>
                     </div>
                 </div>
             </article>

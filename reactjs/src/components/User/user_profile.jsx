@@ -6,9 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Profile() {
 
+
     const { http } = AuthUser();
     const userid = window.location.pathname.split('/').pop();
-
 
     const [userData, setUserData] = useState(null);
     const [name, setName] = useState('');
@@ -50,7 +50,8 @@ export default function Profile() {
 
     const handleEmailVerification = async () => {
         try {
-            const response = await http.post(`/user/verify-email/${userid}`);
+            const response = await http.post(`/email/verification-notification`);
+            // Show toast for success
             toast.success(response.data.message);
         } catch (error) {
             console.error(error);
@@ -82,7 +83,9 @@ export default function Profile() {
                                     onChange={(e) => setName(e.target.value)} type="text" defaultValue={userData.name} />
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                    Email ({userData.email_verified_at !== null ? 'Verified' : 'Not Verified'})
+                                </label>
                                 <input
                                     id="email"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -100,14 +103,14 @@ export default function Profile() {
                             <button onClick={handleInformationChanges} className="inline-block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 Update Information
                             </button>
-                            <Link to="/admin/users" className="inline-block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            <Link to="/" className="inline-block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 Back
                             </Link>
                         </div>
                     </>
                 )}
             </div>
-            <div className="p-6 bg-gray-200 dark:bg-gray-800">
+            <div className="p-6 bg-gray-200 dark:bg-gray-800 mb-44">
                 <h2 className="text-2xl font-semibold mb-4">Actions</h2>
                 <button onClick={handleEmailVerification} className="btn-primary mr-4">Verify Email</button>
                 <button onClick={handlePasswordReset} className="btn-primary">Reset Password</button>

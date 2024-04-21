@@ -64,6 +64,9 @@ export default function UserCRUD() {
                                     Status
                                 </th>
                                 <th scope="col" className="px-6 py-3">
+                                    Email Verified
+                                </th>
+                                <th scope="col" className="px-6 py-3">
                                 </th>
                             </tr>
                         </thead>
@@ -86,6 +89,17 @@ export default function UserCRUD() {
                                         <td className="px-6 py-4">
                                             {user.status}
                                         </td>
+                                        <td className="px-6 py-4">
+                                            {user.email_verified_at !== null ? (
+                                                <span className="bg-green-100 text-green-800 text-1xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                                    Verified
+                                                </span>
+                                            ) : (
+                                                <span className="bg-red-100 text-red-800 text-1xl font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                                                    Not Verified
+                                                </span>
+                                            )}
+                                        </td>
                                         <td className="px-6 py-4 text-right">
                                             <Link>
                                                 <a href={`admin/user/edit/${user.id}`} onClick={() => editUser(user.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
@@ -104,6 +118,7 @@ export default function UserCRUD() {
                             )}
                         </tbody>
                     </table>
+                    <br /><br /><br />
                     <div className="flex justify-center mt-4">
                         <nav className="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                             <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hover:text-gray-600 px-3 py-2 rounded-l-md text-sm font-medium">Previous</button>

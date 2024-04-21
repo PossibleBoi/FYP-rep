@@ -30,6 +30,10 @@ export default function ProjectCRUD() {
             .catch((error) => {
                 console.log(error);
             });
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 3500);
     }
 
     const GetGenre = () => {
@@ -53,7 +57,7 @@ export default function ProjectCRUD() {
 
         setTimeout(() => {
             window.location.reload();
-        }, 1500);
+        }, 1000);
     };
 
     const fetchProjects = () => {
@@ -73,7 +77,7 @@ export default function ProjectCRUD() {
     useEffect(() => {
         GetGenre();
         fetchProjects();
-    }, [projectTypeFilter, projects]); // Added 'projects' to the dependency array
+    }, [projectTypeFilter]); // Removed 'projects' from the dependency array
 
     const filteredProjects = projectTypeFilter
         ? projects.filter(project => project.type === projectTypeFilter)
@@ -145,6 +149,9 @@ export default function ProjectCRUD() {
             ) : (
                 <p>No projects available.</p> // Display a message when no projects are available
             )}
+
+            <br /><br /><br /><br /><br />
+
         </div>
     );
 }

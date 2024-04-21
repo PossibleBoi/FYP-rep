@@ -11,6 +11,8 @@ import InvolvedProjects from '../User/involved_projects';
 import Profile from '../User/user_profile';
 import AboutUs from '../Projects/about_us';
 import ProjectsAll from '../Projects/projects_all';
+import { FaUserCircle } from 'react-icons/fa'; // Importing FontAwesome icon
+import Footer from './footer';
 
 export default function UserNav() {
     const { user, token, logout } = AuthUser();
@@ -22,7 +24,7 @@ export default function UserNav() {
             navigate("/login");
         }
     }
-    
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
@@ -34,16 +36,16 @@ export default function UserNav() {
             <nav className="bg-yellow-400 shadow-lg">
                 <div className="flex justify-between items-center py-3">
                     <div>
-                        <Link to="/about_us">
+                        <Link to="/">
                             <img src={require('./logo.png')} className="w-20 h-auto absolute mb-0 -mt-10" alt="DIYO Logo" />
                         </Link>
                     </div>
-                    <Link to="/" className="text-3xl text-white block ml-8">DIYO</Link>
+                    <Link to="/" className="text-3xl text-white block ml-20 mr-1">DIYO</Link>
                     <div className="hidden md:flex items-center space-x-8">
                         {/* Dropdown menu */}
                         <div className="relative group mx-4">
-                            <button onClick={toggleDropdown} className="text-white group-hover:text-gray-300 focus:outline-none">
-                                {user.name}
+                            <button onClick={toggleDropdown} className="text-white group-hover:text-gray-300 focus:outline-none flex items-center">
+                                <FaUserCircle className="w-3/4 mr-1" /> {/* Use the FontAwesome user circle icon */}
                                 <svg className={`w-4 h-4 ml-1 transition-transform transform ${isDropdownOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10 12a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                                     <path fillRule="evenodd" d="M10 3a2 2 0 100 4 2 2 0 000-4zm0 14a2 2 0 100-4 2 2 0 000 4zm0-9a2 2 0 100-4 2 2 0 000 4zm0 9a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
@@ -82,7 +84,6 @@ export default function UserNav() {
                     </div>
                 </div>
             </nav>
-
             <div className="container mx-auto">
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -97,6 +98,7 @@ export default function UserNav() {
                     <Route path='/about_us' element={<AboutUs />} />
                 </Routes>
             </div>
+            <Footer />
         </div>
     )
 }

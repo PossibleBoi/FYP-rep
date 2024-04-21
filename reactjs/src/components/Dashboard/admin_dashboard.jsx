@@ -6,13 +6,9 @@ export default function YourComponent() {
 
     const { http } = AuthUser();
 
-    // const [userTotal, setUserTotal] = useState(50);
-    // const [projectTotal, setProjectTotal] = useState(50);
-    // const [transactionTotal, setTransactionTotal] = useState(100);
-
     const [userTotal, setUserTotal] = useState(0);
     const [projectTotal, setProjectTotal] = useState(0);
-    const [transactionTotal, setTransactionTotal] = useState(0);
+    const [projectCounts, setProjectCounts] = useState({ crowdfund: 0, invest: 0 });
 
     useEffect(() => {
         // Fetch total number of users
@@ -21,52 +17,50 @@ export default function YourComponent() {
                 setUserTotal(response.data);
             })
             .catch((error) => {
-                console.error('Error fetching total users:', error);
+                console.error('Error fetching total users:', error); 
             });
 
         // Fetch total number of projects
-        http.get('/admin/projects/total')
+        http.get('/admin/projects/all')
             .then((response) => {
-                setProjectTotal(response.data);
+                // Count Crowdfund and Invest projects
+                const crowdfundCount = response.data[0].filter(project => project.type === 'Crowdfund').length;
+                const investCount = response.data[0].filter(project => project.type === 'Invest').length;
+                setProjectCounts({ crowdfund: crowdfundCount, invest: investCount });
+                setProjectTotal(response.data[0].length);
             })
             .catch((error) => {
-                console.error('Error fetching total projects:', error);
+                console.error('Error fetching project counts:', error);
             });
+    }, []);
 
-        // Fetch total number of transactions
-        http.get('/admin/transactions/total')
-            .then((response) => {
-                setTransactionTotal(response.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching total transactions:', error);
-            });
-    },
-        []);
 
-    // Refs for the chart canvas and chart instance
-    const chartRef = useRef(null);
-    const chartInstanceRef = useRef(null);
+    // Refs for the chart canvases and chart instances
+    const barChartRef = useRef(null);
+    const pieChartRef = useRef(null);
+    const barChartInstanceRef = useRef(null);
+    const pieChartInstanceRef = useRef(null);
 
     useEffect(() => {
-        // Destroy existing chart instance if it exists
-        if (chartInstanceRef.current) {
-            chartInstanceRef.current.destroy();
+        // Destroy existing chart instances if they exist
+        if (barChartInstanceRef.current) {
+            barChartInstanceRef.current.destroy();
+        }
+        if (pieChartInstanceRef.current) {
+            pieChartInstanceRef.current.destroy();
         }
 
-        // Data for the chart
-        const data = {
-            labels: ['Users', 'Projects', 'Transactions'],
+        // Data for the bar chart
+        const barChartData = {
+            labels: ['Users', 'Projects'],
             datasets: [{
-                label: 'Increase Over Time',
-                data: [userTotal, projectTotal, transactionTotal],
+                label: 'Count',
+                data: [userTotal, projectTotal],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)'
                 ],
@@ -74,38 +68,71 @@ export default function YourComponent() {
             }]
         };
 
-        // Chart options
-        const options = {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    suggestedMin: 0,
-                    suggestedMax: 50 // Adjust this value based on your data range
-                }
-            }
+        // Options for the bar chart
+        const barChartOptions = {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
         };
 
-        // Render chart
-        if (chartRef.current) {
-            const ctx = chartRef.current.getContext('2d');
-            chartInstanceRef.current = new Chart(ctx, {
-                type: 'line',
-                data: data,
-                options: options
+        // Render bar chart
+        if (barChartRef.current) {
+            const ctx = barChartRef.current.getContext('2d');
+            barChartInstanceRef.current = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: barChartOptions
             });
         }
-    }, [userTotal, projectTotal, transactionTotal]);
+
+        // Data for the pie chart
+        const pieChartData = {
+            labels: ['Crowdfund', 'Invest'],
+            datasets: [{
+                label: 'Project Types',
+                data: [projectCounts.crowdfund, projectCounts.invest],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Options for the pie chart
+        const pieChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+        };
+
+        // Render pie chart
+        if (pieChartRef.current) {
+            const ctx = pieChartRef.current.getContext('2d');
+            pieChartInstanceRef.current = new Chart(ctx, {
+                type: 'pie',
+                data: pieChartData,
+                options: pieChartOptions
+            });
+        }
+    }, [userTotal, projectTotal, projectCounts]);
 
     return (
-        <div className="h-max overflow-auto">
+         <div className="h-max overflow-auto">
             <div className="bg-white p-6 rounded-md shadow-md">
                 <p className="text-lg font-semibold mb-2">Total Users: {userTotal}</p>
                 <p className="text-lg font-semibold mb-2">Total Projects: {projectTotal}</p>
-                <p className="text-lg font-semibold mb-2">Total Transactions: {transactionTotal}</p>
             </div>
             <div className="bg-white p-6 rounded-md shadow-md mt-4">
-                <canvas ref={chartRef}></canvas>
+                <canvas ref={barChartRef} width={400} height={300}></canvas>
             </div>
+            <div className="bg-white p-6 rounded-md shadow-md mt-4">
+                <canvas ref={pieChartRef} width={400} height={200}></canvas>
+            </div>
+            <br/><br/><br/><br/><br/>
         </div>
     );
 }

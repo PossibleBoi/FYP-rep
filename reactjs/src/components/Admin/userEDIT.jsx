@@ -166,7 +166,7 @@ export default function UserEDIT() {
                         </tbody>
                     </table>
                 </div>
-                <div className="mt-3">
+                <div className="mt-3 mb-96">
                     <button onClick={handleInformationChanges} className="inline-block text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                         Update Information
                     </button>
@@ -174,7 +174,11 @@ export default function UserEDIT() {
                         Back
                     </Link>
                 </div>
+                <br/><br/><br/><br /><br /><br />
+                <div>{/*For spacing*/}
+                </div>
             </div>
+
         </>
     )
 }

@@ -16,7 +16,7 @@ class AdminController extends Controller
 
     public function user_edit(Request $request)
     {
-        $user = User::select('id', 'name', 'role', 'email', 'location', 'status')
+        $user = User::select('id', 'name', 'role', 'email' ,'location', 'status')
         ->find($request->id);
         
         return response()->json([

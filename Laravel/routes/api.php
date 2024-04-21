@@ -2,13 +2,14 @@
 
 use App\Models\User;
 use App\Models\Projects;
+use App\Models\Transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProjectController;
-use App\Models\Transactions;
+use App\Http\Controllers\VerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +21,15 @@ use App\Models\Transactions;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/email/verification-notification', [VerificationController::class, 'sendVerificationEmail'])->middleware('auth:api');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login',  [AuthController::class, 'login']);
+Route::post('login',  [AuthController::class, 'login'])->name('login');
 Route::post('register',  [AuthController::class, 'register']);
 Route::get('/home', [ProjectController::class, 'home_projects']);
 Route::get('/project/{id}', [ProjectController::class, 'project']);
@@ -44,8 +48,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('admin/users/total', function () {
         return response()->json([User::count()]);
     });
-    Route::get('admin/projects/total', function () {
-        return response()->json([Projects::count()]);
+    Route::get('admin/projects/all', function () {
+        return response()->json([Projects::get()->all()]);
     });
     Route::get('admin/transactions/total', function () {
         return response()->json([Transactions::count()]);
@@ -79,10 +83,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user/project/{id}/updates', [UserController::class, 'project_updates']);
     Route::delete('user/project/{id}/update/{updateid}', [UserController::class, 'delete_update']);
 
-    Route::get('/user/{id}', [UserController::class, 'user']);
+    Route::get('/user/{id}', [UserController::class, 'user'])->name('profile');
     Route::put('/user/{id}/update', [UserController::class, 'update_user']);
-    Route::post('/user/reset-password/{id}',[UserController::class, 'resetPassword']);
-    Route::post('/user/verify-email/{id}', [UserController::class, 'verifyEmail']);
 
     Route::post('/transaction/add', [UserController::class, 'add_transaction']);
 

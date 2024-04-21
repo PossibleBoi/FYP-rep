@@ -7,6 +7,7 @@ import Home from '../Authentication/home';
 import Project_View from '../Projects/project_view';
 import AboutUs from '../Projects/about_us';
 import ProjectsAll from '../Projects/projects_all';
+import Footer from './footer';
 
 export default function GuestNav() {
   return (
@@ -14,11 +15,11 @@ export default function GuestNav() {
       <nav className="bg-yellow-500 shadow-lg">
         <div className="flex justify-between items-center py-3">
           <div>
-            <Link to="/about_us">
+            <Link to="/">
               <img src={require('./logo.png')} className="w-20 h-auto absolute mb-0 -mt-10" alt="DIYO Logo" />
             </Link>
           </div>
-          <Link to="/" className="text-3xl text-white block -mr-7">DIYO</Link>
+          <Link to="/" className="text-3xl text-white block ml-20 mr-4">DIYO</Link>
           <ul className="hidden md:flex items-center space-x-8">
             <li>
               <Link to="/login" className="text-white text-1xl hover:text-gray-300 mx-2">Login</Link>
@@ -36,6 +37,9 @@ export default function GuestNav() {
           <Route path='/about_us' element={<AboutUs />} />
         </Routes>
       </div>
+
+      <Footer />
+
     </div>
   );
 }

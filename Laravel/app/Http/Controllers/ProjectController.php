@@ -72,12 +72,20 @@ class ProjectController extends Controller
 
         // Only fetch transactions and backers if the project type is 'Invest'
         if ($project[0]->type === 'Invest') {
-            $backers = User::where('id', $transaction[0]->backerID)->get();
-            $project[0]->backers = $backers;
+            // Check if $transaction is not null and has elements
+            if (!is_null($transaction) && count($transaction) > 0) {
+                $backers = User::where('id', $transaction[0]->backerID)->get();
+                $project[0]->backers = $backers;
+            }
         }
-        $totalAmount = $transaction->reduce(function ($carry, $transaction) {
-            return $carry + floatval($transaction->amount);
-        }, 0);
+
+        // Calculate total amount raised only if $transaction is not null
+        $totalAmount = 0;
+        if (!is_null($transaction)) {
+            $totalAmount = $transaction->reduce(function ($carry, $transaction) {
+                return $carry + floatval($transaction->amount);
+            }, 0);
+        }
 
         $project[0]->total_transactions = count($transaction);
         $project[0]->total_amount_raised = $totalAmount;
@@ -91,6 +99,7 @@ class ProjectController extends Controller
             'project' => $project,
         ]);
     }
+
 
     public function add_report(Request $request)
     {

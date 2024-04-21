@@ -18,7 +18,7 @@ class UserController extends Controller
 {
     public function users() //Returns all user information
     {
-        $users = User::select('id', 'name', 'role', 'email', 'location', 'status')->get();
+        $users = User::select('id', 'name', 'role', 'email', 'email_verified_at', 'location', 'status')->get();
         return response()->json([
             $users
         ]);
