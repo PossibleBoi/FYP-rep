@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AuthUser from '../Authentication/AuthUser';
 import { useNavigate } from 'react-router-dom'; // Import useHistory hook
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Project_View() {
     const { user, http, khalti } = AuthUser();
@@ -76,7 +78,7 @@ export default function Project_View() {
         ).then((response) => {
             window.location.href = response.data.payment_url;
         }).catch((error) => {
-            console.error(error);
+            toast.error('Enter Valid Amount');
         });
     }
 
@@ -111,8 +113,10 @@ export default function Project_View() {
             report: report,
         }).then((response) => {
             console.log(response.data);
+            toast.success('Report submitted successfully');
         }).catch((error) => {
             console.error(error);
+            toast.error('Failed to submit report. Please try again.');
         })
         // After submitting, you can close the modal
         setReportModal(false);
@@ -192,7 +196,7 @@ export default function Project_View() {
                                         </div>
                                     </>
                                 ) : (
-                                    <span className="text-red-500">Project is not active.<br/>Status: {project.status}</span>
+                                    <span className="text-red-500">Project is not active.<br />Status: {project.status}</span>
                                 )}
                             </div>
                         </div>
@@ -376,6 +380,8 @@ export default function Project_View() {
                     </div>
                 )
             }
+            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
         </div >
     );
 }

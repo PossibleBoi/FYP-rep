@@ -298,6 +298,18 @@ export default function Project_Edit_View() {
             paginatedBackersWithProducts.push(backersWithProducts.slice(i, i + 5));
         }
     }
+
+    const handleMarkCompletion = () => {
+        // Send a request to mark the project as complete
+        http.put(`/user/project/${project_id}/complete`)
+            .then((response) => {
+                toast.success('Project marked as complete!');
+            })
+            .catch((error) => {
+                toast.error('Error marking project as complete. Please try again later.');
+            });
+    };
+
     return (
         <div className="grid">
             <div className="grid grid-cols-2 bg-yellow-50 p-6 rounded-lg mb-4">
@@ -312,7 +324,7 @@ export default function Project_Edit_View() {
                             id="editedTitle"
                             value={editedTitle}
                             onChange={handleChangeTitle}
-                            className="bg-white p-2 mb-2 rounded w-full resize-none text-sm border border-gray-300"
+                            className="bg-white p-2 mb-2 rounded w-full resize-none text-sm border border-gray-300" required
                         />
                     </div>
                     {/* Project Description */}
@@ -423,6 +435,12 @@ export default function Project_Edit_View() {
                             </button>
                         </div>
                     </div>
+                    <br/>
+                    <div className="flex justify-end">
+                    <button onClick={handleMarkCompletion} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-sm">
+                        Mark Completion of Project
+                    </button>
+                </div>
                 </div>
             </div>
             <hr />

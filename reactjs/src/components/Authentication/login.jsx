@@ -10,6 +10,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showUnauthorizedPopup, setShowUnauthorizedPopup] = useState(false);
+    // const [showPasswordResetForm, setShowPasswordResetForm] = useState(false);
 
     const submitForm = (e) => {
         e.preventDefault();
@@ -36,6 +37,18 @@ export default function Login() {
     const handleGoBack = () => {
         setShowUnauthorizedPopup(false);
     };
+
+    
+    // const handleResetPassword = async () => {
+    //     try {
+    //         const response = await http.post("/password/reset/request", { email: resetEmail });
+    //         toast.success(response.data.message);
+    //         setShowPasswordResetForm(false);
+    //     } catch (error) {
+    //         console.error(error);
+    //         toast.error("Failed to reset password. Please try again.");
+    //     }
+    // };
 
     return (
         <section className="bg-yellow-50">
@@ -67,8 +80,8 @@ export default function Login() {
                                         <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
                                     </div>
                                 </div>
-                                <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
-                            </div>
+                                {/* <button onClick={() => setShowPasswordResetForm(true)} className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</button>     */}
+                                                        </div>
                             <button type="button" onClick={submitForm} className="w-full text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-400 dark:hover:bg-yellow-500 dark:focus:ring-primary-800">Sign in</button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                 Don’t have an account yet? <Link to="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
@@ -77,6 +90,19 @@ export default function Login() {
                     </div>
                 </div>
             </div>
+
+            {/* Password reset form
+            {showPasswordResetForm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg">
+                        <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
+                        <input type="email" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} className="w-full mb-4 border border-gray-300 rounded p-2" placeholder="Enter your email" />
+                        <div className="flex justify-end">
+                            <button onClick={handleResetPassword} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Reset Password</button>
+                        </div>
+                    </div>
+                </div>
+            )} */}
             {/* Unauthorized popup */}
             {showUnauthorizedPopup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">

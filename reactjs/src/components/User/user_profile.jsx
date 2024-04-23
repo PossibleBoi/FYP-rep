@@ -58,16 +58,7 @@ export default function Profile() {
             toast.error("Failed to verify email. Please try again.");
         }
     };
-
-    const handlePasswordReset = async () => {
-        try {
-            const response = await http.post(`/user/reset-password/${userid}`);
-            toast.success(response.data.message);
-        } catch (error) {
-            console.error(error);
-            toast.error("Failed to reset password. Please try again.");
-        }
-    };
+  
     return (
         <>
             <div className="w-full px-4 py-2 bg-gray-200 lg:w-full">
@@ -112,8 +103,7 @@ export default function Profile() {
             </div>
             <div className="p-6 bg-gray-200 dark:bg-gray-800 mb-44">
                 <h2 className="text-2xl font-semibold mb-4">Actions</h2>
-                <button onClick={handleEmailVerification} className="btn-primary mr-4">Verify Email</button>
-                <button onClick={handlePasswordReset} className="btn-primary">Reset Password</button>
+                <button onClick={handleEmailVerification} className="btn-primary">Verify Email</button>
             </div>
             <ToastContainer />
         </>

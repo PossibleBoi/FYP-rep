@@ -26,7 +26,7 @@ class UserController extends Controller
 
     public function user(Request $request) //Returns a specific user's information
     {
-        $user = User::select('id', 'name', 'role', 'email', 'location', 'status')
+        $user = User::select('id', 'name', 'role', 'email', 'email_verified_at', 'location', 'status')
             ->find($request->id);
 
         return response()->json([
@@ -188,6 +188,16 @@ class UserController extends Controller
         ]);
     }
     
+    public function project_complete(Request $request, $id)
+    {
+        $project = Projects::where('projectID', $id)->firstOrFail();
+        $project->status = 'Complete';
+        $project->save();
+    
+        return response()->json([
+            'message' => 'Project marked as completed',
+        ]);
+    }
 
     public function updateProjectDetails(Request $request, $id)
     {

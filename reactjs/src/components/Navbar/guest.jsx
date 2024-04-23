@@ -7,6 +7,7 @@ import Home from '../Authentication/home';
 import Project_View from '../Projects/project_view';
 import AboutUs from '../Projects/about_us';
 import ProjectsAll from '../Projects/projects_all';
+import PasswordReset from '../Authentication/password_reset';
 import Footer from './footer';
 
 export default function GuestNav() {
@@ -35,6 +36,7 @@ export default function GuestNav() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path='/about_us' element={<AboutUs />} />
+          <Route path='/password_reset' element={<PasswordReset />} />
         </Routes>
       </div>
 
